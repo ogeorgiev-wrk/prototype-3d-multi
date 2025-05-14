@@ -13,7 +13,7 @@ namespace Arc.Core.Enemy {
         private float _currentTime;
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            _spawnInterval = 1f;
+            _spawnInterval = 100000f;
             _currentTime = 0;
         }
 

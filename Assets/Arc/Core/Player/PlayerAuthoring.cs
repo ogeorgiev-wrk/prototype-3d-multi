@@ -18,6 +18,7 @@ namespace Arc.Core.Player {
 
     public struct PlayerTag : IComponentData { }
     public struct PlayerInput : IInputComponentData {
-        public float2 InputVector;
+        public float2 MovementInput;
+        public InputEvent AttackInput;
     }
 }

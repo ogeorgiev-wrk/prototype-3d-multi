@@ -1,4 +1,3 @@
-using Arc.Core;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,7 +6,7 @@ using Unity.NetCode;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Arc.Core {
+namespace Arc.Core.Connect {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     partial struct GoInGameServerSystem : ISystem {
         [BurstCompile]

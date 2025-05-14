@@ -15,7 +15,7 @@ namespace Arc.Core.Player {
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             foreach (var (movementDirection, playerInput) in SystemAPI.Query<RefRW<UnitMovementDirection>, RefRO<PlayerInput>>().WithAll<Simulate>()) {
-                var inputVector = playerInput.ValueRO.InputVector;
+                var inputVector = playerInput.ValueRO.MovementInput;
                 movementDirection.ValueRW.Value = new float3(inputVector.x, 0, inputVector.y);
             }
         }

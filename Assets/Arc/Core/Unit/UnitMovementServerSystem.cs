@@ -6,9 +6,6 @@ using Unity.Physics;
 using Unity.Transforms;
 
 namespace Arc.Core.Unit {
-
-
-
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     public partial struct UnitMovementServerSystem : ISystem {
         [BurstCompile]

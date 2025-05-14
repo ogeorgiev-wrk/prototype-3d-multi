@@ -16,10 +16,16 @@ namespace Arc.Core.Player {
         }
 
         protected override void OnUpdate() {
-            var currentInput = _inputActions.Player.Move.ReadValue<Vector2>();
+            var movementInput = _inputActions.Player.Move.ReadValue<Vector2>();
+            var isShooting = _inputActions.Player.Attack.IsPressed();
 
             foreach(var playerInput in SystemAPI.Query<RefRW<PlayerInput>>().WithAll<GhostOwnerIsLocal>()) {
-                playerInput.ValueRW.InputVector = (float2)currentInput;
+                playerInput.ValueRW.MovementInput = (float2)movementInput;
+                if (isShooting) {
+                    playerInput.ValueRW.AttackInput.Set();
+                } else {
+                    playerInput.ValueRW.AttackInput = default;
+                }
             }
         }
     }

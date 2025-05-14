@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-namespace Arc.Core {
+namespace Arc.Core.Connect {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     partial struct GoInGameClientSystem : ISystem {
         [BurstCompile]
@@ -36,4 +36,6 @@ namespace Arc.Core {
 
         }
     }
+
+    public struct GoInGameRequestRpc : IRpcCommand { }
 }
