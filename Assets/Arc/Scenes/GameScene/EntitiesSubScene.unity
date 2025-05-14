@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 507738287}
   - component: {fileID: 507738286}
   m_Layer: 0
-  m_Name: _EntitiesReferences
+  m_Name: EntitiesReferences
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -235,6 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerPrefabGameObject: {fileID: 6718506095367317958, guid: cf7cb5abbece0cd40ba72390586a5996, type: 3}
+  EnemyPrefabGameObject: {fileID: 3916601303676411153, guid: ea42a2f6871280d49bf595bc936252cd, type: 3}
 --- !u!4 &507738287
 Transform:
   m_ObjectHideFlags: 0

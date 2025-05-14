@@ -28,11 +28,11 @@ namespace Arc.Core {
             foreach (var (receiveRequest, entity) in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>>().WithAll<GoInGameRequestRpc>().WithEntityAccess()) {
                 ecb.AddComponent<NetworkStreamInGame>(receiveRequest.ValueRO.SourceConnection);
 
-                Debug.Log("[GoInGameServerSystem]Connected: " + entity);
+                //Debug.Log("[GoInGameServerSystem]Connected: " + entity);
 
                 var playerEntity = ecb.Instantiate(entitiesReferences.PlayerPrefabEntity);
-                var playerSpawnPosition = new float3() { x = UnityEngine.Random.Range(-5, 5), y = 0, z = 0 };
-                ecb.SetComponent(playerEntity, LocalTransform.FromPosition(playerSpawnPosition));
+                var spawnPosition = new float3() { x = UnityEngine.Random.Range(-10, 10), y = 0, z = 0 };
+                ecb.SetComponent(playerEntity, LocalTransform.FromPosition(spawnPosition));
 
                 var ownerId = SystemAPI.GetComponent<NetworkId>(receiveRequest.ValueRO.SourceConnection);
                 ecb.AddComponent(playerEntity, new GhostOwner() { NetworkId = ownerId.Value });

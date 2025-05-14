@@ -15,7 +15,7 @@ namespace Arc.Core {
         public void OnUpdate(ref SystemState state) {
             var ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
             foreach(var (rpc, request, entity) in SystemAPI.Query<RefRO<SimpleRpc>, RefRO<ReceiveRpcCommandRequest>>().WithEntityAccess()) {
-                Debug.Log("RPC: " + rpc.ValueRO.value + " :: " + entity + " :: " + request.ValueRO.SourceConnection);
+                //Debug.Log("RPC: " + rpc.ValueRO.value + " :: " + entity + " :: " + request.ValueRO.SourceConnection);
                 ecb.DestroyEntity(entity);
             }
             ecb.Playback(state.EntityManager);

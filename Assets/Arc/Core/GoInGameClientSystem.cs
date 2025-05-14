@@ -21,7 +21,7 @@ namespace Arc.Core {
 
             foreach(var (networkId, entity) in SystemAPI.Query<RefRO<NetworkId>>().WithNone<NetworkStreamInGame>().WithEntityAccess()) {
                 ecb.AddComponent<NetworkStreamInGame>(entity);
-                Debug.Log("[GoInGameClientSystem]Connecting: " + entity + " :: " + networkId.ValueRO.Value);
+                //Debug.Log("[GoInGameClientSystem]Connecting: " + entity + " :: " + networkId.ValueRO.Value);
 
                 var rpcEntity = ecb.CreateEntity();
                 ecb.AddComponent<GoInGameRequestRpc>(rpcEntity);
