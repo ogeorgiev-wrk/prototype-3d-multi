@@ -10,20 +10,18 @@ namespace Arc.Core.Enemy {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     partial struct EnemySpawnServerSystem : ISystem {
         private float _spawnInterval;
-        private float _currentTime;
+        private float _spawnTimer;
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            _spawnInterval = 100000f;
-            _currentTime = 0;
+            _spawnInterval = .1f;
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            var deltaTime = SystemAPI.Time.DeltaTime;
-            _currentTime += deltaTime;
-            if (_currentTime < _spawnInterval) return;
+            _spawnTimer -= Time.deltaTime;
+            if (_spawnTimer > 0) return;
+            _spawnTimer = _spawnInterval;
 
-            _currentTime = 0;
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
 
