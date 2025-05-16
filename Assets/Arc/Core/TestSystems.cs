@@ -15,7 +15,7 @@ namespace Arc.Core {
 
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state) {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             foreach (var (rpc, request, entity) in SystemAPI.Query<RefRO<SimpleRpc>, RefRO<ReceiveRpcCommandRequest>>().WithEntityAccess()) {

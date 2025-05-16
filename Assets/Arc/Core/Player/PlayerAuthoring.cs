@@ -13,6 +13,8 @@ namespace Arc.Core.Player {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new PlayerTag() { });
             AddComponent(entity, new PlayerInput() { });
+            AddComponent(entity, new PlayerCameraInitializationFlag());
+            AddComponent(entity, new PlayerCameraTarget());
         }
     }
 
@@ -20,5 +22,9 @@ namespace Arc.Core.Player {
     public struct PlayerInput : IInputComponentData {
         public float2 MovementInput;
         public InputEvent AttackInput;
+    }
+    public struct PlayerCameraInitializationFlag : IComponentData, IEnableableComponent { }
+    public struct PlayerCameraTarget : IComponentData {
+        public UnityObjectRef<Transform> CameraTransform;
     }
 }
