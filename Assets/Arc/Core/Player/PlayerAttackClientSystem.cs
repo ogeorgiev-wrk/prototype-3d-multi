@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace Arc.Core.Player {
+    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     [UpdateInGroup(typeof(PredictedSimulationSystemGroup))]
     public partial struct PlayerAttackClientSystem : ISystem {
         [BurstCompile]

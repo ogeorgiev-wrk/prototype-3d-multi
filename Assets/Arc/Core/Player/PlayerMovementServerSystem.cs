@@ -5,8 +5,9 @@ using Unity.NetCode;
 using Unity.Mathematics;
 
 namespace Arc.Core.Player {
+    [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     [UpdateInGroup(typeof(PredictedSimulationSystemGroup))]
-    public partial struct PlayerMovementClientSystem : ISystem {
+    public partial struct PlayerMovementServerSystem : ISystem {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
 

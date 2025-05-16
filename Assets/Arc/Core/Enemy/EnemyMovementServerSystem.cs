@@ -13,12 +13,13 @@ namespace Arc.Core.Enemy {
     partial struct EnemyMovementServerSystem : ISystem {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            state.RequireForUpdate<PlayerTag>();
+
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             var targetQuery = SystemAPI.QueryBuilder().WithAll<PlayerTag, LocalTransform>().Build();
+            if (targetQuery.IsEmpty) return;
             var targetList = targetQuery.ToComponentDataArray<LocalTransform>(Allocator.TempJob);
 
             var enemyMovementJob = new EnemyMovementJob() { targetArray = targetList };
@@ -32,6 +33,7 @@ namespace Arc.Core.Enemy {
     }
 
     [BurstCompile]
+    [WithAll(typeof(EnemyTag))]
     public partial struct EnemyMovementJob : IJobEntity {
         [ReadOnly] public NativeArray<LocalTransform> targetArray;
         public void Execute(ref UnitMovementDirection direction, in LocalTransform transform) {

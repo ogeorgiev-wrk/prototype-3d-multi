@@ -4,6 +4,7 @@ using Unity.Transforms;
 using UnityEngine;
 
 namespace Arc.Core.Player {
+    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     [UpdateInGroup(typeof(InitializationSystemGroup))]
     public partial struct PlayerCameraInitializationSystem : ISystem {
         [BurstCompile]
@@ -22,6 +23,7 @@ namespace Arc.Core.Player {
         }
     }
 
+    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     [UpdateAfter(typeof(TransformSystemGroup))]
     public partial struct PlayerCameraMoveSystem : ISystem {
         public void OnUpdate(ref SystemState state) {

@@ -6,6 +6,7 @@ using Unity.NetCode;
 using UnityEngine;
 
 namespace Arc.Core.Player {
+    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     [UpdateInGroup(typeof(GhostInputSystemGroup))]
     public partial class PlayerInputClientSystem : SystemBase {
         private InputSystem_Actions _inputActions;
