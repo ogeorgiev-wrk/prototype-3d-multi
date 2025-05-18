@@ -20,9 +20,9 @@ namespace Arc.Core.Enemy {
         public void OnUpdate(ref SystemState state) {
             var targetQuery = SystemAPI.QueryBuilder().WithAll<PlayerTag, LocalTransform>().Build();
             if (targetQuery.IsEmpty) return;
-            var targetList = targetQuery.ToComponentDataArray<LocalTransform>(Allocator.TempJob);
 
-            var enemyMovementJob = new EnemyMovementJob() { targetArray = targetList };
+            var targetArray = targetQuery.ToComponentDataArray<LocalTransform>(state.WorldUpdateAllocator);
+            var enemyMovementJob = new EnemyMovementJob() { TargetArray = targetArray };
             enemyMovementJob.ScheduleParallel();
         }
 
@@ -35,23 +35,24 @@ namespace Arc.Core.Enemy {
     [BurstCompile]
     [WithAll(typeof(EnemyTag))]
     public partial struct EnemyMovementJob : IJobEntity {
-        [ReadOnly] public NativeArray<LocalTransform> targetArray;
-        public void Execute(ref UnitMovementDirection direction, in LocalTransform transform) {
-            var targetPosition = targetArray[0].Position;
+        [ReadOnly] public NativeArray<LocalTransform> TargetArray;
+        public void Execute(ref UnitMovementDirection movementDirection, ref UnitLookDirection lookDirection, in LocalTransform transform) {
+            var targetPosition = TargetArray[0].Position;
 
             var minDistanceSq = math.distancesq(targetPosition, transform.Position);
-            foreach (var target in targetArray) {
+            foreach (var target in TargetArray) {
                 var currentDistanceSq = math.distancesq(target.Position, transform.Position);
-                if (currentDistanceSq < minDistanceSq) {
-                    minDistanceSq = currentDistanceSq;
-                    targetPosition = target.Position;
-                }
+                if (currentDistanceSq >= minDistanceSq) continue;
+
+                minDistanceSq = currentDistanceSq;
+                targetPosition = target.Position;
             }
 
             var targetDirectionBase = targetPosition - transform.Position;
             var targetDirectionNormalized = math.normalize(targetDirectionBase);
 
-            direction.Value = targetDirectionNormalized;
+            movementDirection.Value = targetDirectionNormalized;
+            lookDirection.Value = targetDirectionNormalized;
         }
     }
 }

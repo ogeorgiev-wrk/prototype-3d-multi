@@ -31,7 +31,7 @@ namespace Arc.Core.Unit {
     [BurstCompile]
     public partial struct UnitRotationJob : IJobEntity {
         public float DeltaTime;
-        public void Execute(ref LocalTransform localTransform, in UnitMovementDirection direction, in UnitMovementTurnRate turnRate) {
+        public void Execute(ref LocalTransform localTransform, in UnitLookDirection direction, in UnitMovementTurnRate turnRate) {
             if (direction.Value.Equals(float3.zero)) return;
 
             var targetRotation = quaternion.LookRotation(direction.Value, math.up());

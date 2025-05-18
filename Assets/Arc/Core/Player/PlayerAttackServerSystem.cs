@@ -6,9 +6,9 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace Arc.Core.Player {
-    [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
+    [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     [UpdateInGroup(typeof(PredictedSimulationSystemGroup))]
-    public partial struct PlayerAttackClientSystem : ISystem {
+    public partial struct PlayerAttackServerSystem : ISystem {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<NetworkTime>();

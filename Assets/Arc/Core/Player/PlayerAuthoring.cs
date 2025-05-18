@@ -21,6 +21,7 @@ namespace Arc.Core.Player {
     public struct PlayerTag : IComponentData { }
     public struct PlayerInput : IInputComponentData {
         public float2 MovementInput;
+        public float2 LookInput;
         public InputEvent AttackInput;
     }
     public struct PlayerCameraInitializationFlag : IComponentData, IEnableableComponent { }

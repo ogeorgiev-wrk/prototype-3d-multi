@@ -1,5 +1,6 @@
 using Unity.Burst;
 using Unity.Entities;
+using Unity.NetCode;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -27,7 +28,7 @@ namespace Arc.Core.Player {
     [UpdateAfter(typeof(TransformSystemGroup))]
     public partial struct PlayerCameraMoveSystem : ISystem {
         public void OnUpdate(ref SystemState state) {
-            foreach (var (transform, cameraTarget) in SystemAPI.Query<LocalToWorld, PlayerCameraTarget>().WithAll<PlayerTag>().WithDisabled<PlayerCameraInitializationFlag>()) {
+            foreach (var (transform, cameraTarget) in SystemAPI.Query<LocalToWorld, PlayerCameraTarget>().WithAll<PlayerTag, GhostOwnerIsLocal>().WithDisabled<PlayerCameraInitializationFlag>()) {
                 cameraTarget.CameraTransform.Value.position = transform.Position;
             }
         }
