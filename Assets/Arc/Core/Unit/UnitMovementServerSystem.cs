@@ -14,9 +14,6 @@ namespace Arc.Core.Unit {
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            var unitInitJob = new UnitMovementInitJob();
-            unitInitJob.ScheduleParallel();
-
             var unitMovementJob = new UnitMovementJob();
             unitMovementJob.ScheduleParallel();
         }
@@ -24,14 +21,6 @@ namespace Arc.Core.Unit {
         [BurstCompile]
         public void OnDestroy(ref SystemState state) {
 
-        }
-    }
-
-    [BurstCompile]
-    public partial struct UnitMovementInitJob : IJobEntity {
-        public void Execute(RefRW<PhysicsMass> physicsMass, EnabledRefRW<UnitMovementInitFlag> initFlag) {
-            physicsMass.ValueRW.InverseInertia = float3.zero;
-            initFlag.ValueRW = false;
         }
     }
 

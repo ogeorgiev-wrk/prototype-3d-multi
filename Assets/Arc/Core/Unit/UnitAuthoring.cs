@@ -20,7 +20,7 @@ namespace Arc.Core.Unit {
     }
     
 
-    public struct UnitMovementInitFlag : IComponentData, IEnableableComponent { }
+    public struct UnitInitFlag : IComponentData, IEnableableComponent { }
 
     public class UnitAuthoring : MonoBehaviour {
         [Header("MOVEMENT")]
@@ -31,7 +31,7 @@ namespace Arc.Core.Unit {
             public override void Bake(UnitAuthoring authoring) {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
 
-                AddComponent(entity, new UnitMovementInitFlag());
+                AddComponent(entity, new UnitInitFlag());
                 AddComponent(entity, new UnitMovementSpeed() { Value = authoring.MovementSpeed });
                 AddComponent(entity, new UnitMovementTurnRate() { Value = authoring.TurnRate });
                 AddComponent(entity, new UnitMovementDirection());
