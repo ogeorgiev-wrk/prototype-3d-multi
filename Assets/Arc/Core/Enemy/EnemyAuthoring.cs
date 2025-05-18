@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Arc.Core.Enemy {
@@ -10,8 +11,13 @@ namespace Arc.Core.Enemy {
         public override void Bake(EnemyAuthoring authoring) {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new EnemyTag());
+            AddComponent(entity, new EnemyTargetPosition());
         }
     }
 
     public struct EnemyTag : IComponentData { }
+
+    public struct EnemyTargetPosition : IComponentData {
+        public float3 Value;
+    }
 }

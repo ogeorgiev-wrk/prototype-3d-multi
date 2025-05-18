@@ -13,7 +13,8 @@ namespace Arc.Core.Enemy {
         private float _spawnTimer;
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            _spawnInterval = .1f;
+            _spawnInterval = .5f;
+            state.RequireForUpdate<EntitiesReferences>();
         }
 
         [BurstCompile]
