@@ -9,26 +9,34 @@ using Unity.Transforms;
 namespace Arc.Core.Enemy {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     partial struct EnemySpawnServerSystem : ISystem {
-        private float _spawnInterval;
-        private float _spawnTimer;
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            _spawnInterval = .5f;
-            state.RequireForUpdate<EntitiesReferences>();
+
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            _spawnTimer -= Time.deltaTime;
-            if (_spawnTimer > 0) return;
-            _spawnTimer = _spawnInterval;
-
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
+            var deltaTime = SystemAPI.Time.DeltaTime;
 
-            var enemyEntity = ecb.Instantiate(entitiesReferences.EnemyPrefabEntity);
-            var spawnPosition = new float3() { x = UnityEngine.Random.Range(-40, 40), y = 0, z = UnityEngine.Random.Range(-40, 40) };
-            ecb.SetComponent(enemyEntity, LocalTransform.FromPosition(spawnPosition));
+            foreach (var (spawnerState, spawnData, transform) in SystemAPI.Query<RefRW<EnemySpawnerState>, RefRO<EnemySpawnerData>, RefRO<LocalTransform>>().WithAll<EnemySpawnerTag, Simulate>()) {
+                spawnerState.ValueRW.Cooldown -= deltaTime;
+                if (spawnerState.ValueRW.Cooldown > 0) continue;
+
+                spawnerState.ValueRW.Cooldown = spawnData.ValueRO.SpawnRate;
+                var enemyEntity = ecb.Instantiate(spawnData.ValueRO.EnemyPrefabEntity);
+
+                var spawnAngle = spawnerState.ValueRW.Random.NextFloat(0f, math.TAU);
+                var spawnPoint = new float3 {
+                    x = math.sin(spawnAngle),
+                    y = 0f,
+                    z = math.cos(spawnAngle)
+                };
+                var spawnOffset = spawnPoint * spawnerState.ValueRW.Random.NextFloat(spawnData.ValueRO.SpawnRadiusMin, spawnData.ValueRO.SpawnRadiusMax);
+
+                var spawnPosition = transform.ValueRO.Position + spawnOffset;
+                ecb.SetComponent(enemyEntity, LocalTransform.FromPosition(spawnPosition));
+            }
 
             ecb.Playback(state.EntityManager);
         }

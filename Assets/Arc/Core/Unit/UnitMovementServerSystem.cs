@@ -28,6 +28,7 @@ namespace Arc.Core.Unit {
     public partial struct UnitMovementJob : IJobEntity {
         public void Execute(ref PhysicsVelocity physicsVelocity, in UnitMovementSpeed speed, in UnitMovementDirection direction) {
             if (direction.Value.Equals(float3.zero)) return;
+            if (speed.Value == 0f) return;
 
             float3 moveDirectionBase = direction.Value;
             float3 moveDirectionNormalized = math.normalize(moveDirectionBase);
