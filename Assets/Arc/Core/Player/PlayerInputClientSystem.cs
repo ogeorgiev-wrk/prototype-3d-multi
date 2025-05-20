@@ -18,20 +18,31 @@ namespace Arc.Core.Player {
         }
 
         protected override void OnUpdate() {
-            var movementInput = _inputActions.Player.Move.ReadValue<Vector2>();
-            var lookInput = _inputActions.Player.Look.ReadValue<Vector2>();
-            var isShooting = _inputActions.Player.Attack.IsPressed();
+            foreach (var input in SystemAPI.Query<RefRW<PlayerMovementInput>>().WithAll<GhostOwnerIsLocal>()) {
+                var movementInput = _inputActions.Player.Move.ReadValue<Vector2>();
+                input.ValueRW.Value = (float2)movementInput;
+            }
 
-            foreach(var playerInput in SystemAPI.Query<RefRW<PlayerInput>>().WithAll<GhostOwnerIsLocal>()) {
-                playerInput.ValueRW.MovementInput = (float2)movementInput;
-
+            foreach (var input in SystemAPI.Query<RefRW<PlayerLookInput>>().WithAll<GhostOwnerIsLocal>()) {
+                var lookInput = _inputActions.Player.Look.ReadValue<Vector2>();
                 var lookInputViewport = Camera.main.ScreenToViewportPoint(new Vector3(lookInput.x, lookInput.y, 0f));
-                playerInput.ValueRW.LookInput = new float2(lookInputViewport.x - 0.5f, lookInputViewport.y - 0.5f);
+                input.ValueRW.Value = new float2(lookInputViewport.x - 0.5f, lookInputViewport.y - 0.5f);
+            }
 
-                if (isShooting) {
-                    playerInput.ValueRW.AttackInput.Set();
+
+            foreach (var input in SystemAPI.Query<RefRW<PlayerAttackInput>>().WithAll<GhostOwnerIsLocal>()) {
+                var isPrimaryAttack = _inputActions.Player.PrimaryAttack.IsPressed();
+                if (isPrimaryAttack) {
+                    input.ValueRW.PrimaryAttack.Set();
                 } else {
-                    playerInput.ValueRW.AttackInput = default;
+                    input.ValueRW.PrimaryAttack = default;
+                }
+
+                var isSecondaryAttack = _inputActions.Player.SecondaryAttack.IsPressed();
+                if (isSecondaryAttack) {
+                    input.ValueRW.SecondaryAttack.Set();
+                } else {
+                    input.ValueRW.SecondaryAttack = default;
                 }
             }
         }

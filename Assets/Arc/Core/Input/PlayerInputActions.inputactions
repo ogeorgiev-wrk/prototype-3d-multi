@@ -24,13 +24,22 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Attack",
+                    "name": "PrimaryAttack",
                     "type": "Button",
                     "id": "4919ccbc-97bb-4697-8de4-a93d11abbb0a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SecondaryAttack",
+                    "type": "Button",
+                    "id": "9a3a2e0e-e6f1-4ca3-92d5-51ac19d9bdf2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -102,12 +111,23 @@
                 },
                 {
                     "name": "",
-                    "id": "28e355f3-9c3e-4994-9c1e-2bc34edef73c",
-                    "path": "<Pointer>/press",
+                    "id": "c416e7b0-4acc-473e-a1f0-bd9e80f6bf84",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Attack",
+                    "action": "PrimaryAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3c521dc1-ae2c-48e1-88e8-ad60fc78cf4e",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

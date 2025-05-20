@@ -18,11 +18,16 @@ namespace Arc.Core.Player {
         public void OnUpdate(ref SystemState state) {
             var networkTime = SystemAPI.GetSingleton<NetworkTime>();
 
-            foreach (var (localTransform, playerInput) in SystemAPI.Query<RefRW<LocalTransform>, RefRO<PlayerInput>>().WithAll<Simulate>()) {
+            foreach (var (localTransform, playerInput) in SystemAPI.Query<RefRW<LocalTransform>, RefRO<PlayerAttackInput>>().WithAll<Simulate>()) {
                 if (!networkTime.IsFinalFullPredictionTick) continue;
 
-                var isAttacking = playerInput.ValueRO.AttackInput.IsSet;
-                localTransform.ValueRW.Scale = isAttacking ? 1.2f : 1f;
+                var isPrimary = playerInput.ValueRO.PrimaryAttack.IsSet;
+                var isSecondary = playerInput.ValueRO.SecondaryAttack.IsSet;
+                if (!isPrimary && !isSecondary) {
+                    localTransform.ValueRW.Scale = 1f;
+                    continue;
+                }
+                localTransform.ValueRW.Scale = isPrimary ? 1.2f : .8f;
             }
         }
 

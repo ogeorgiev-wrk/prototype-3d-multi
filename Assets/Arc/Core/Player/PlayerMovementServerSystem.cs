@@ -35,8 +35,8 @@ namespace Arc.Core.Player {
     [BurstCompile]
     [WithAll(typeof(PlayerTag), typeof(Simulate))]
     public partial struct PlayerMovementJob : IJobEntity {
-        public void Execute(ref UnitMovementDirection movementDirection, in PlayerInput playerInput) {
-            movementDirection.Value = new float3(playerInput.MovementInput.x, 0, playerInput.MovementInput.y);
+        public void Execute(ref UnitMovementDirection movementDirection, in PlayerMovementInput input) {
+            movementDirection.Value = new float3(input.Value.x, 0, input.Value.y);
         }
     }
 }
