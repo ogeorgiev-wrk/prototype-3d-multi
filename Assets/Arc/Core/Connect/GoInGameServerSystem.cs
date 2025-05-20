@@ -1,3 +1,4 @@
+using Arc.Core.Player;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -11,27 +12,33 @@ namespace Arc.Core.Connect {
     partial struct GoInGameServerSystem : ISystem {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            state.RequireForUpdate<EntitiesReferences>();
             state.RequireForUpdate<NetworkId>();
-            var ecb = new EntityQueryBuilder(Allocator.Temp).WithAll<ReceiveRpcCommandRequest>().WithAll<GoInGameRequestRpc>();
-            state.RequireForUpdate(state.GetEntityQuery(ecb));
-            ecb.Dispose();
+
+            var rpcQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<ReceiveRpcCommandRequest, GoInGameRequestRpc>();
+            state.RequireForUpdate(state.GetEntityQuery(rpcQuery));
+            rpcQuery.Dispose();
+
+            var spawnerQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<PlayerSpawnerTag, Simulate>();
+            state.RequireForUpdate(state.GetEntityQuery(spawnerQuery));
+            spawnerQuery.Dispose();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
+
             var ecb = new EntityCommandBuffer(Allocator.Temp);
-            var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
 
+            var spawnerQuery = SystemAPI.QueryBuilder().WithAll<PlayerSpawnerTag, PlayerSpawnerData, LocalTransform>().Build();
+            var spawnerDataArray = spawnerQuery.ToComponentDataArray<PlayerSpawnerData>(state.WorldUpdateAllocator);
+            var spawnerTransformArray = spawnerQuery.ToComponentDataArray<LocalTransform>(state.WorldUpdateAllocator);
 
-            foreach (var (receiveRequest, entity) in SystemAPI.Query<RefRO<ReceiveRpcCommandRequest>>().WithAll<GoInGameRequestRpc>().WithEntityAccess()) {
+            foreach (var (requestRpc, receiveRequest, entity) in SystemAPI.Query<RefRO<GoInGameRequestRpc>, RefRO<ReceiveRpcCommandRequest>>().WithEntityAccess()) {
                 ecb.AddComponent<NetworkStreamInGame>(receiveRequest.ValueRO.SourceConnection);
+                var spawnIndex = requestRpc.ValueRO.SpawnerIndex;
+                //Debug.Log("[GoInGameServerSystem]Connected: " + entity + " " + spawnIndex);
 
-                //Debug.Log("[GoInGameServerSystem]Connected: " + entity);
-
-                var playerEntity = ecb.Instantiate(entitiesReferences.PlayerPrefabEntity);
-                var spawnPosition = new float3() { x = UnityEngine.Random.Range(-10, 10), y = 0, z = 0 };
-                ecb.SetComponent(playerEntity, LocalTransform.FromPosition(spawnPosition));
+                var playerEntity = ecb.Instantiate(spawnerDataArray[spawnIndex].PrefabEntity);
+                ecb.SetComponent(playerEntity, LocalTransform.FromPosition(spawnerTransformArray[spawnIndex].Position));
 
                 var ownerId = SystemAPI.GetComponent<NetworkId>(receiveRequest.ValueRO.SourceConnection);
                 ecb.AddComponent(playerEntity, new GhostOwner() { NetworkId = ownerId.Value });
@@ -40,6 +47,7 @@ namespace Arc.Core.Connect {
 
                 ecb.DestroyEntity(entity);
             }
+
 
             ecb.Playback(state.EntityManager);
         }

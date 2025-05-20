@@ -10,9 +10,10 @@ namespace Arc.Core.Connect {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<NetworkId>();
-            var eqb = new EntityQueryBuilder(Allocator.Temp).WithAll<NetworkId>().WithNone<NetworkStreamInGame>();
-            state.RequireForUpdate(state.GetEntityQuery(eqb));
-            eqb.Dispose();
+
+            var networkQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<NetworkId>().WithNone<NetworkStreamInGame>();
+            state.RequireForUpdate(state.GetEntityQuery(networkQuery));
+            networkQuery.Dispose();
         }
 
         [BurstCompile]
@@ -24,8 +25,8 @@ namespace Arc.Core.Connect {
                 //Debug.Log("[GoInGameClientSystem]Connecting: " + entity + " :: " + networkId.ValueRO.Value);
 
                 var rpcEntity = ecb.CreateEntity();
-                ecb.AddComponent<GoInGameRequestRpc>(rpcEntity);
-                ecb.AddComponent<SendRpcCommandRequest>(rpcEntity);
+                ecb.AddComponent(rpcEntity, new GoInGameRequestRpc() { SpawnerIndex = 0 });
+                ecb.AddComponent(rpcEntity, new SendRpcCommandRequest());
             }
 
             ecb.Playback(state.EntityManager);
@@ -37,5 +38,7 @@ namespace Arc.Core.Connect {
         }
     }
 
-    public struct GoInGameRequestRpc : IRpcCommand { }
+    public struct GoInGameRequestRpc : IRpcCommand {
+        public int SpawnerIndex;
+    }
 }
