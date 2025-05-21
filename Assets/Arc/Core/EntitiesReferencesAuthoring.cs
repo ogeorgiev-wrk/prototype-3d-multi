@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace Arc.Core {
     public class EntitiesReferencesAuthoring : MonoBehaviour {
-        public GameObject PlayerPrefabGameObject;
+        public GameObject AttackPrefabGameObject;
     }
 
     public class EntitiesReferencesAuthoringBaker : Baker<EntitiesReferencesAuthoring> {
         public override void Bake(EntitiesReferencesAuthoring authoring) {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new EntitiesReferences() {
-                PlayerPrefabEntity = GetEntity(authoring.PlayerPrefabGameObject, TransformUsageFlags.Dynamic),
+                AttackPrefabEntity = GetEntity(authoring.AttackPrefabGameObject, TransformUsageFlags.Dynamic),
             });
         }
     }
 
     public struct EntitiesReferences : IComponentData {
-        public Entity PlayerPrefabEntity;    
+        public Entity AttackPrefabEntity;    
     }
 }

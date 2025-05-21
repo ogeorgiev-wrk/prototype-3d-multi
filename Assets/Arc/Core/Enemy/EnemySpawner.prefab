@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5729649333131399138}
   - component: {fileID: 8167142671239076267}
-  m_Layer: 7
+  m_Layer: 3
   m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyPrefabGameObject: {fileID: 3916601303676411153, guid: ea42a2f6871280d49bf595bc936252cd, type: 3}
-  SpawnRate: 1
+  SpawnRate: 10000
   SpawnRadiusMin: 1
   SpawnRadiusMax: 3
   SpawnSeed: 100
@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 3432610099170500130}
   - component: {fileID: 8104536533812333747}
   - component: {fileID: 1783103725485006495}
-  m_Layer: 7
+  m_Layer: 3
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: eb6e8800822566649bccedbe43dfe04f, type: 2}
+  - {fileID: 2100000, guid: 2b68c5bea2ed3f5498980e216a5c6536, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

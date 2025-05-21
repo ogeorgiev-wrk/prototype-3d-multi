@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Arc.Core.Player {
     public class PlayerAuthoring : MonoBehaviour {
-
+        public Transform AttackOrigin;
     }
 
     public class PlayerAuthoringBaker : Baker<PlayerAuthoring> {
@@ -18,17 +18,21 @@ namespace Arc.Core.Player {
             AddComponent(entity, new PlayerMovementInput() { });
             AddComponent(entity, new PlayerLookInput() { });
             AddComponent(entity, new PlayerAttackInput() { });
+            AddComponent(entity, new PlayerAttackOrigin() { Value = authoring.AttackOrigin.localPosition });
         }
     }
 
     public struct PlayerTag : IComponentData { }
+    public struct PlayerAttackOrigin : IComponentData {
+        public float3 Value;
+    }
 
     public struct PlayerMovementInput : IInputComponentData {
         public float2 Value;
     }
 
     public struct PlayerLookInput : IInputComponentData {
-        public float2 Value;
+        public float3 Value;
     }
 
     public struct PlayerAttackInput : IInputComponentData {
