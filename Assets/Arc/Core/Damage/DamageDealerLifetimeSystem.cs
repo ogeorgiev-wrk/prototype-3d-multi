@@ -23,7 +23,6 @@ namespace Arc.Core.Damage {
                 ecb.SetComponentEnabled<DamageDealerDestroyFlag>(entity, true);
             }
 
-
             foreach (var (_, entity) in SystemAPI.Query<EnabledRefRO<DamageDealerDestroyFlag>>().WithEntityAccess()) {
                 ecb.DestroyEntity(entity);
             }

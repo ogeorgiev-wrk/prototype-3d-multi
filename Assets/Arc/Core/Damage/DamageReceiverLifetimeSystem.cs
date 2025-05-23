@@ -18,12 +18,6 @@ namespace Arc.Core.Damage {
         public void OnUpdate(ref SystemState state) {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
 
-            foreach (var (_, entity) in SystemAPI.Query<EnabledRefRO<DamageReceiverDestroyFlag>>().WithEntityAccess()) {
-                ecb.DestroyEntity(entity);
-            }
-
-            ecb.Playback(state.EntityManager);
-
             foreach (var (receiverState, receiverBuffer, entity) in SystemAPI.Query<RefRW<DamageReceiverState>, DynamicBuffer<DamageReceiverBuffer>>().WithPresent<DamageReceiverDestroyFlag>().WithEntityAccess()) {
                 if (receiverBuffer.IsEmpty) continue;
                 foreach (var damage in receiverBuffer) {
@@ -32,10 +26,15 @@ namespace Arc.Core.Damage {
                 receiverBuffer.Clear();
 
                 if (receiverState.ValueRW.HealthCurrent <= 0) {
-                    SystemAPI.SetComponentEnabled<DamageReceiverDestroyFlag>(entity, true);
+                    ecb.SetComponentEnabled<DamageReceiverDestroyFlag>(entity, true);
                 }
             }
 
+            foreach (var (_, entity) in SystemAPI.Query<EnabledRefRO<DamageReceiverDestroyFlag>>().WithEntityAccess()) {
+                ecb.DestroyEntity(entity);
+            }
+
+            ecb.Playback(state.EntityManager);
         }
 
         [BurstCompile]
