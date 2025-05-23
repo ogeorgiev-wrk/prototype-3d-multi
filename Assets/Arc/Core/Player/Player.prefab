@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 2276004325156163960}
   - component: {fileID: -6129191631399138476}
   - component: {fileID: 2909892901033966115}
+  - component: {fileID: 8341323996659867541}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -285,6 +286,18 @@ MonoBehaviour:
   UsePreSerialization: 1
   RollbackPredictedSpawnedGhostState: 0
   RollbackPredictionOnStructuralChanges: 0
+--- !u!114 &8341323996659867541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6718506095367317958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f184bff1359fc704d94c19377f53fc6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8494995557173849484
 GameObject:
   m_ObjectHideFlags: 0

@@ -112,18 +112,9 @@ namespace Arc.Core.Input
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""PrimaryAttack"",
+                    ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""4919ccbc-97bb-4697-8de4-a93d11abbb0a"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""SecondaryAttack"",
-                    ""type"": ""Button"",
-                    ""id"": ""9a3a2e0e-e6f1-4ca3-92d5-51ac19d9bdf2"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -204,18 +195,7 @@ namespace Arc.Core.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PrimaryAttack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3c521dc1-ae2c-48e1-88e8-ad60fc78cf4e"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SecondaryAttack"",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -228,8 +208,7 @@ namespace Arc.Core.Input
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
             m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-            m_Player_PrimaryAttack = m_Player.FindAction("PrimaryAttack", throwIfNotFound: true);
-            m_Player_SecondaryAttack = m_Player.FindAction("SecondaryAttack", throwIfNotFound: true);
+            m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         }
 
         ~@PlayerInputActions()
@@ -312,8 +291,7 @@ namespace Arc.Core.Input
         private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
         private readonly InputAction m_Player_Move;
         private readonly InputAction m_Player_Look;
-        private readonly InputAction m_Player_PrimaryAttack;
-        private readonly InputAction m_Player_SecondaryAttack;
+        private readonly InputAction m_Player_Attack;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -334,13 +312,9 @@ namespace Arc.Core.Input
             /// </summary>
             public InputAction @Look => m_Wrapper.m_Player_Look;
             /// <summary>
-            /// Provides access to the underlying input action "Player/PrimaryAttack".
+            /// Provides access to the underlying input action "Player/Attack".
             /// </summary>
-            public InputAction @PrimaryAttack => m_Wrapper.m_Player_PrimaryAttack;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/SecondaryAttack".
-            /// </summary>
-            public InputAction @SecondaryAttack => m_Wrapper.m_Player_SecondaryAttack;
+            public InputAction @Attack => m_Wrapper.m_Player_Attack;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -373,12 +347,9 @@ namespace Arc.Core.Input
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
-                @PrimaryAttack.started += instance.OnPrimaryAttack;
-                @PrimaryAttack.performed += instance.OnPrimaryAttack;
-                @PrimaryAttack.canceled += instance.OnPrimaryAttack;
-                @SecondaryAttack.started += instance.OnSecondaryAttack;
-                @SecondaryAttack.performed += instance.OnSecondaryAttack;
-                @SecondaryAttack.canceled += instance.OnSecondaryAttack;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
             }
 
             /// <summary>
@@ -396,12 +367,9 @@ namespace Arc.Core.Input
                 @Look.started -= instance.OnLook;
                 @Look.performed -= instance.OnLook;
                 @Look.canceled -= instance.OnLook;
-                @PrimaryAttack.started -= instance.OnPrimaryAttack;
-                @PrimaryAttack.performed -= instance.OnPrimaryAttack;
-                @PrimaryAttack.canceled -= instance.OnPrimaryAttack;
-                @SecondaryAttack.started -= instance.OnSecondaryAttack;
-                @SecondaryAttack.performed -= instance.OnSecondaryAttack;
-                @SecondaryAttack.canceled -= instance.OnSecondaryAttack;
+                @Attack.started -= instance.OnAttack;
+                @Attack.performed -= instance.OnAttack;
+                @Attack.canceled -= instance.OnAttack;
             }
 
             /// <summary>
@@ -457,19 +425,12 @@ namespace Arc.Core.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnLook(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "PrimaryAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnPrimaryAttack(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "SecondaryAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnSecondaryAttack(InputAction.CallbackContext context);
+            void OnAttack(InputAction.CallbackContext context);
         }
     }
 }

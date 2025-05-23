@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace Arc.Core.Player {
+namespace Arc.Core.Camera {
 
-    public class PlayerCameraTargetSingleton : MonoBehaviour {
-        public static PlayerCameraTargetSingleton Instance;
+    public class CameraTargetSingleton : MonoBehaviour {
+        public static CameraTargetSingleton Instance;
 
         private void Awake() {
             if (Instance != null) {

@@ -29,19 +29,17 @@ namespace Arc.Core.Player {
                 SystemAPI.Query<RefRW<LocalTransform>, RefRW<PlayerAttackState>, RefRO<PlayerAttackData>, RefRO<UnitLookDirection>, RefRO<PlayerAttackInput>>().WithAll<Simulate>()) {
                 if (!networkTime.IsFinalFullPredictionTick) continue;
 
-                var isPrimary = playerInput.ValueRO.PrimaryAttack.IsSet;
-                var isSecondary = playerInput.ValueRO.SecondaryAttack.IsSet;
+                var isAttacking = playerInput.ValueRO.Value.IsSet;
 
-
-                attackState.ValueRW.Cooldown -= deltaTime;
-                if (attackState.ValueRW.Cooldown > 0 && isSecondary) continue;
-                attackState.ValueRW.Cooldown = attackData.ValueRO.AttackRate;
-
-                
-                if (!isPrimary && !isSecondary) {
+                if (!isAttacking) {
                     localTransform.ValueRW.Scale = 1f;
+                    attackState.ValueRW.Cooldown = 0f;
                     continue;
                 }
+
+                attackState.ValueRW.Cooldown -= deltaTime;
+                if (attackState.ValueRW.Cooldown > 0) continue;
+                attackState.ValueRW.Cooldown = attackData.ValueRO.AttackRate;                
                 
 
                 var attackEntity = ecb.Instantiate(entitiesReferences.AttackPrefabEntity);
@@ -54,7 +52,7 @@ namespace Arc.Core.Player {
                     Direction = lookDirection.ValueRO.Value,
                 });
 
-                localTransform.ValueRW.Scale = isPrimary ? 1.2f : .8f;
+                localTransform.ValueRW.Scale = isAttacking ? 1.2f : .8f;
             }
 
             ecb.Playback(state.EntityManager);
