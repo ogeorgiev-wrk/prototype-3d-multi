@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Collections;
 using UnityEngine;
-using Arc.Core.Attack;
+using Arc.Core.Damage;
 
 namespace Arc.Core.Player {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
@@ -25,14 +25,15 @@ namespace Arc.Core.Player {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var deltaTime = SystemAPI.Time.DeltaTime;
 
-            foreach (var (localTransform, attackState, attackData, lookDirection, playerInput) in 
-                SystemAPI.Query<RefRW<LocalTransform>, RefRW<PlayerAttackState>, RefRO<PlayerAttackData>, RefRO<UnitLookDirection>, RefRO<PlayerAttackInput>>().WithAll<Simulate>()) {
+            foreach (var (playerTransform, attackState, attackData, lookInput, attackInput) in 
+                SystemAPI.Query<RefRW<LocalTransform>, RefRW<PlayerAttackState>, RefRO<PlayerAttackData>, RefRO<PlayerLookInput>, RefRO<PlayerAttackInput>>().WithAll<PlayerTag, Simulate>()) {
                 if (!networkTime.IsFinalFullPredictionTick) continue;
 
-                var isAttacking = playerInput.ValueRO.Value.IsSet;
+                var isAttacking = attackInput.ValueRO.Value.IsSet;
+
 
                 if (!isAttacking) {
-                    localTransform.ValueRW.Scale = 1f;
+                    playerTransform.ValueRW.Scale = 1f;
                     attackState.ValueRW.Cooldown = 0f;
                     continue;
                 }
@@ -43,16 +44,19 @@ namespace Arc.Core.Player {
                 
 
                 var attackEntity = ecb.Instantiate(entitiesReferences.AttackPrefabEntity);
-                var spawnPosition = localTransform.ValueRO.TransformPoint(attackData.ValueRO.Origin);
-                var attackOrigin = LocalTransform.FromPositionRotation(spawnPosition, localTransform.ValueRO.Rotation);
+                var attackOriginPosition = playerTransform.ValueRO.TransformPoint(attackData.ValueRO.Origin);
 
-                ecb.SetComponent(attackEntity, attackOrigin);
-                ecb.SetComponent(attackEntity, new AttackState() {
-                    StartPosition = attackOrigin.Position,
-                    Direction = lookDirection.ValueRO.Value,
+                var attackDirection = lookInput.ValueRO.Value - playerTransform.ValueRO.Position;
+                var attackTransform = LocalTransform.FromPositionRotation(attackOriginPosition, quaternion.LookRotation(attackDirection, math.up()));
+                
+
+                ecb.SetComponent(attackEntity, attackTransform);
+                ecb.SetComponent(attackEntity, new DamageDealerState() {
+                    StartPosition = attackTransform.Position,
+                    Direction = attackDirection,
                 });
 
-                localTransform.ValueRW.Scale = isAttacking ? 1.2f : .8f;
+                playerTransform.ValueRW.Scale = isAttacking ? 1.2f : 1f;
             }
 
             ecb.Playback(state.EntityManager);

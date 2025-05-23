@@ -34,9 +34,9 @@ namespace Arc.Core.Unit {
         public void Execute(ref LocalTransform localTransform, in UnitLookDirection direction, in UnitMovementTurnRate turnRate) {
             if (direction.Value.Equals(float3.zero)) return;
 
-            //var targetRotation = quaternion.LookRotation(direction.Value, math.up());
-            //localTransform.Rotation = math.slerp(localTransform.Rotation, targetRotation, turnRate.Value * DeltaTime);
-            localTransform.Rotation = quaternion.LookRotation(direction.Value, math.up());
+            var targetRotation = quaternion.LookRotation(direction.Value, math.up());
+            localTransform.Rotation = math.slerp(localTransform.Rotation, targetRotation, turnRate.Value * DeltaTime);
+            //localTransform.Rotation = quaternion.LookRotation(direction.Value, math.up());
         }
     }
 

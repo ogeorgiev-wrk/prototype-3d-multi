@@ -32,7 +32,7 @@ namespace Arc.Core.Player {
             }
 
             foreach (var input in SystemAPI.Query<RefRW<PlayerAttackInput>>().WithAll<GhostOwnerIsLocal>()) {
-                var isPrimaryAttack = _inputActions.Player.Attack.IsPressed();
+                var isPrimaryAttack = _inputActions.Player.Attack.WasPressedThisFrame();
                 if (isPrimaryAttack) {
                     input.ValueRW.Value.Set();
                 } else {

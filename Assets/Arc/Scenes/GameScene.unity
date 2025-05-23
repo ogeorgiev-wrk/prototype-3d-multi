@@ -667,7 +667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _SceneAsset: {fileID: 102900000, guid: 7f77f984715e8a542af4c5d17bf57120, type: 3}
-  _HierarchyColor: {r: 0.6981132, g: 0.10208259, b: 0.10208259, a: 1}
+  _HierarchyColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
   AutoLoadScene: 1
   _SceneGUID:
     Value:
@@ -750,7 +750,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1728842614
 MonoBehaviour:
   m_ObjectHideFlags: 0

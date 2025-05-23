@@ -18,7 +18,6 @@ namespace Arc.Core.Unit {
     public struct UnitLookDirection : IComponentData {
         public float3 Value;
     }
-    
 
     public struct UnitInitFlag : IComponentData, IEnableableComponent { }
 

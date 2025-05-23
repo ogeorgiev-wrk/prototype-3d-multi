@@ -129,12 +129,12 @@ GameObject:
   - component: {fileID: 3448023196866873073}
   - component: {fileID: 8675518855767982332}
   - component: {fileID: 6435395749126644352}
+  - component: {fileID: 2909892901033966115}
+  - component: {fileID: -6129191631399138476}
   - component: {fileID: 4207210658214032029}
   - component: {fileID: 3212237511966093865}
-  - component: {fileID: 2276004325156163960}
-  - component: {fileID: -6129191631399138476}
-  - component: {fileID: 2909892901033966115}
   - component: {fileID: 8341323996659867541}
+  - component: {fileID: 5251003116834071839}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -209,6 +209,42 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2909892901033966115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6718506095367317958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c79d771cedb4794bf100ce60df5f764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultGhostMode: 2
+  SupportedGhostModes: 3
+  OptimizationMode: 0
+  Importance: 1
+  prefabId: cf7cb5abbece0cd40ba72390586a5996
+  HasOwner: 1
+  SupportAutoCommandTarget: 1
+  TrackInterpolationDelay: 1
+  GhostGroup: 0
+  UsePreSerialization: 1
+  RollbackPredictedSpawnedGhostState: 0
+  RollbackPredictionOnStructuralChanges: 0
+--- !u!114 &-6129191631399138476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6718506095367317958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4207210658214032029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,55 +273,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackOrigin: {fileID: 1818435594536851420}
   AttackRate: 0.2
---- !u!114 &2276004325156163960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6718506095367317958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d84823db24075ec4dbc1fe7a3fb2afbf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HealthMax: 1000
---- !u!114 &-6129191631399138476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6718506095367317958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2909892901033966115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6718506095367317958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c79d771cedb4794bf100ce60df5f764, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultGhostMode: 2
-  SupportedGhostModes: 3
-  OptimizationMode: 0
-  Importance: 1
-  prefabId: cf7cb5abbece0cd40ba72390586a5996
-  HasOwner: 1
-  SupportAutoCommandTarget: 1
-  TrackInterpolationDelay: 1
-  GhostGroup: 0
-  UsePreSerialization: 1
-  RollbackPredictedSpawnedGhostState: 0
-  RollbackPredictionOnStructuralChanges: 0
 --- !u!114 &8341323996659867541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,6 +285,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f184bff1359fc704d94c19377f53fc6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5251003116834071839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6718506095367317958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a84e41ed665c1f948a415b79281a44fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HealthMax: 50
 --- !u!1 &8494995557173849484
 GameObject:
   m_ObjectHideFlags: 0

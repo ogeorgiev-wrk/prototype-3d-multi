@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7700778429691446254}
-  - component: {fileID: 3047707010218400427}
   - component: {fileID: 4900284925610312944}
   - component: {fileID: 2739225514740593982}
   - component: {fileID: 9181430445076890799}
   - component: {fileID: 2098609157924998373}
-  m_Layer: 6
-  m_Name: Attack
+  - component: {fileID: -30091238917536357}
+  m_Layer: 7
+  m_Name: EnemyAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,22 +37,6 @@ Transform:
   - {fileID: 3736397545168924613}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3047707010218400427
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7468307538448741647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a378c19a0769cda4aabeb1f346c0c184, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PrefabGameObject: {fileID: 0}
-  Range: 15
-  MoveSpeed: 30
-  Damage: 15
 --- !u!114 &4900284925610312944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,7 +65,7 @@ MonoBehaviour:
   SupportedGhostModes: 3
   OptimizationMode: 0
   Importance: 1
-  prefabId: d1f4e88bfcbab894aa65ecc7bb27cf80
+  prefabId: 8480a1710d1d5344f88ba1530d009989
   HasOwner: 0
   SupportAutoCommandTarget: 1
   TrackInterpolationDelay: 0
@@ -135,8 +119,23 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3, y: 0.1, z: 2}
+  m_Size: {x: 2, y: 0.1, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-30091238917536357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7468307538448741647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94885c3fbe4c513418e4d0c7db4ea79c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Range: 3
+  MoveSpeed: 20
+  Damage: 10
 --- !u!1 &8897701698636227798
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,7 +147,7 @@ GameObject:
   - component: {fileID: 3736397545168924613}
   - component: {fileID: 5718843313289189400}
   - component: {fileID: 8632608270089217792}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +164,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 0.1, z: 2}
+  m_LocalScale: {x: 2, y: 0.1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7700778429691446254}
@@ -201,7 +200,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e43ad6fd2d5542941a76c2a31eda72c0, type: 2}
+  - {fileID: 2100000, guid: 2b68c5bea2ed3f5498980e216a5c6536, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
