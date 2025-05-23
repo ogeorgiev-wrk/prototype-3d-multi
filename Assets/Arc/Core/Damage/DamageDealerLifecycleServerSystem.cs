@@ -8,7 +8,7 @@ using Unity.Collections;
 
 namespace Arc.Core.Damage {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
-    partial struct DamageDealerLifetimeServerSystem : ISystem {
+    partial struct DamageDealerLifecycleServerSystem : ISystem {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
 
