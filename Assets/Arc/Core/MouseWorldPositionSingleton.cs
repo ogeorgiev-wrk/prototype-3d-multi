@@ -25,6 +25,12 @@ namespace Arc {
             var lookInput = _inputActions.Player.Look.ReadValue<Vector2>();
             var mouseCameraRay = Camera.main.ScreenPointToRay(lookInput);
 
+            /*
+            if (Physics.Raycast(mouseCameraRay, out RaycastHit raycastHit)) {
+                return raycastHit.point;
+            };
+            */
+
             var plane = new Plane(Vector3.up, Vector3.zero);
 
             if (plane.Raycast(mouseCameraRay, out float distance)) {

@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 namespace Arc.Core.Player {
     public class PlayerAuthoring : MonoBehaviour {
         public Transform AttackOrigin;
+        public float AttackRate;
     }
 
     public class PlayerAuthoringBaker : Baker<PlayerAuthoring> {
@@ -18,13 +19,21 @@ namespace Arc.Core.Player {
             AddComponent(entity, new PlayerMovementInput() { });
             AddComponent(entity, new PlayerLookInput() { });
             AddComponent(entity, new PlayerAttackInput() { });
-            AddComponent(entity, new PlayerAttackOrigin() { Value = authoring.AttackOrigin.localPosition });
+            AddComponent(entity, new PlayerAttackData() {
+                Origin = authoring.AttackOrigin.localPosition,
+                AttackRate = authoring.AttackRate,
+            });
+            AddComponent(entity, new PlayerAttackState());
         }
     }
 
     public struct PlayerTag : IComponentData { }
-    public struct PlayerAttackOrigin : IComponentData {
-        public float3 Value;
+    public struct PlayerAttackData : IComponentData {
+        public float3 Origin;
+        public float AttackRate;
+    }
+    public struct PlayerAttackState : IComponentData {
+        public float Cooldown;
     }
 
     public struct PlayerMovementInput : IInputComponentData {

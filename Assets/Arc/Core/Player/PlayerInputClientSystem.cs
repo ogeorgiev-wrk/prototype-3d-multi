@@ -24,10 +24,6 @@ namespace Arc.Core.Player {
             }
 
             foreach (var input in SystemAPI.Query<RefRW<PlayerLookInput>>().WithAll<GhostOwnerIsLocal>()) {
-                //var lookInput = _inputActions.Player.Look.ReadValue<Vector2>();
-                //var lookInputViewport = Camera.main.ScreenToViewportPoint(new Vector3(lookInput.x, lookInput.y, 0f));
-                //input.ValueRW.Value = new float2(lookInputViewport.x - 0.5f, lookInputViewport.y - 0.5f);
-
                 var lookInput = MouseWorldPositionSingleton.Instance.GetPosition();
                 input.ValueRW.Value = (float3)lookInput;
             }
@@ -41,7 +37,7 @@ namespace Arc.Core.Player {
                     input.ValueRW.PrimaryAttack = default;
                 }
 
-                var isSecondaryAttack = _inputActions.Player.SecondaryAttack.WasPressedThisFrame();
+                var isSecondaryAttack = _inputActions.Player.SecondaryAttack.IsPressed();
                 if (isSecondaryAttack) {
                     input.ValueRW.SecondaryAttack.Set();
                 } else {

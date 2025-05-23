@@ -23,12 +23,21 @@ namespace Arc.Core.Player {
             var networkTime = SystemAPI.GetSingleton<NetworkTime>();
             var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
             var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var deltaTime = SystemAPI.Time.DeltaTime;
 
-            foreach (var (localTransform, playerInput, playerEntity) in SystemAPI.Query<RefRW<LocalTransform>, RefRO<PlayerAttackInput>>().WithAll<Simulate>().WithEntityAccess()) {
+            foreach (var (localTransform, attackState, attackData, lookDirection, playerInput) in 
+                SystemAPI.Query<RefRW<LocalTransform>, RefRW<PlayerAttackState>, RefRO<PlayerAttackData>, RefRO<UnitLookDirection>, RefRO<PlayerAttackInput>>().WithAll<Simulate>()) {
                 if (!networkTime.IsFinalFullPredictionTick) continue;
 
                 var isPrimary = playerInput.ValueRO.PrimaryAttack.IsSet;
                 var isSecondary = playerInput.ValueRO.SecondaryAttack.IsSet;
+
+
+                attackState.ValueRW.Cooldown -= deltaTime;
+                if (attackState.ValueRW.Cooldown > 0 && isSecondary) continue;
+                attackState.ValueRW.Cooldown = attackData.ValueRO.AttackRate;
+
+                
                 if (!isPrimary && !isSecondary) {
                     localTransform.ValueRW.Scale = 1f;
                     continue;
@@ -36,18 +45,13 @@ namespace Arc.Core.Player {
                 
 
                 var attackEntity = ecb.Instantiate(entitiesReferences.AttackPrefabEntity);
-                var originOffset = state.EntityManager.GetComponentData<PlayerAttackOrigin>(playerEntity).Value;
-                var spawnPosition = localTransform.ValueRO.TransformPoint(originOffset);
-
-
-                var playerDirection = state.EntityManager.GetComponentData<UnitLookDirection>(playerEntity).Value;
-
+                var spawnPosition = localTransform.ValueRO.TransformPoint(attackData.ValueRO.Origin);
                 var attackOrigin = LocalTransform.FromPositionRotation(spawnPosition, localTransform.ValueRO.Rotation);
 
                 ecb.SetComponent(attackEntity, attackOrigin);
                 ecb.SetComponent(attackEntity, new AttackState() {
                     StartPosition = attackOrigin.Position,
-                    Direction = playerDirection,
+                    Direction = lookDirection.ValueRO.Value,
                 });
 
                 localTransform.ValueRW.Scale = isPrimary ? 1.2f : .8f;

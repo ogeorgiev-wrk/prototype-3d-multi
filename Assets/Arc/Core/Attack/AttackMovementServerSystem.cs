@@ -1,4 +1,5 @@
 using Arc.Core.Unit;
+using UnityEngine;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -26,17 +27,18 @@ namespace Arc.Core.Attack {
     }
 
     [BurstCompile]
+    [WithAll(typeof(AttackTag))]
     public partial struct AttackMovementJob : IJobEntity {
         public void Execute(ref PhysicsVelocity physicsVelocity, ref AttackState attackState, in AttackData attackData, in LocalTransform transform) {
             if (attackState.Direction.Equals(float3.zero)) return;
             if (attackData.MoveSpeed == 0f) return;
-            if (attackState.IsMaxDistance) return;
+            if (attackState.ShouldDestroy) return;
 
             physicsVelocity.Angular = float3.zero;
 
             var currentDistanceSq = math.distancesq(transform.Position, attackState.StartPosition);
             if (currentDistanceSq >= math.square(attackData.Range)) {
-                attackState.IsMaxDistance = true;
+                attackState.ShouldDestroy = true;
                 physicsVelocity.Linear = float3.zero;
                 return;
             }

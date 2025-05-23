@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyPrefabGameObject: {fileID: 3916601303676411153, guid: ea42a2f6871280d49bf595bc936252cd, type: 3}
-  SpawnRate: 10000
+  SpawnRate: 1
   SpawnRadiusMin: 1
   SpawnRadiusMax: 3
   SpawnSeed: 100
