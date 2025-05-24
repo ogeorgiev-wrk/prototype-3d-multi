@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d15f323ab80d09458d85c89a5cec9a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackPrefabGameObject: {fileID: 7468307538448741647, guid: d1f4e88bfcbab894aa65ecc7bb27cf80, type: 3}
+  AttackPrefabGameObject: {fileID: 7468307538448741647, guid: 391fc725d7282d6418ab633b7563950a, type: 3}
 --- !u!4 &71198255
 Transform:
   m_ObjectHideFlags: 0
@@ -223,7 +223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7352214946349293432, guid: da2585a2ba7af454c94f7e577b2736c9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2.77
       objectReference: {fileID: 0}
     - target: {fileID: 7352214946349293432, guid: da2585a2ba7af454c94f7e577b2736c9, type: 3}
       propertyPath: m_LocalRotation.w

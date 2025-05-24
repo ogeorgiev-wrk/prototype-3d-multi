@@ -17,6 +17,7 @@ namespace Arc.Core.Damage {
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var deltaTime = SystemAPI.Time.DeltaTime;
 
             foreach (var (dealerState, entity) in SystemAPI.Query<RefRO<DamageDealerState>>().WithEntityAccess()) {
                 if (!dealerState.ValueRO.IsMaxRange) continue;
@@ -29,7 +30,9 @@ namespace Arc.Core.Damage {
 
             ecb.Playback(state.EntityManager);
 
-            var movementJob = new DamageDealerLifetimeJob();
+            var movementJob = new DamageDealerMovementJob() {
+                DeltaTime = deltaTime,
+            };
             movementJob.ScheduleParallel();
         }
 
@@ -41,7 +44,9 @@ namespace Arc.Core.Damage {
 
     [BurstCompile]
     [WithAll(typeof(DamageDealerTag))]
-    public partial struct DamageDealerLifetimeJob : IJobEntity {
+    [WithDisabled(typeof(DamageDealerDestroyFlag))] 
+    public partial struct DamageDealerMovementJob : IJobEntity {
+        public float DeltaTime;
         public void Execute(ref PhysicsVelocity physicsVelocity, ref DamageDealerState dealerState, in DamageDealerData dealerData, in LocalTransform transform) {
             if (dealerState.Direction.Equals(float3.zero)) return;
             if (dealerData.MoveSpeed == 0f) return;
@@ -57,7 +62,9 @@ namespace Arc.Core.Damage {
             }
 
             float3 moveDirectionNormalized = math.normalize(dealerState.Direction);
-            physicsVelocity.Linear = moveDirectionNormalized * dealerData.MoveSpeed;
+
+            var targetVelocity = moveDirectionNormalized * dealerData.MoveSpeed;
+            physicsVelocity.Linear = targetVelocity;
         }
     }
 }
