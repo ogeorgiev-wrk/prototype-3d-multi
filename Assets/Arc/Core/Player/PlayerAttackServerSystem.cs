@@ -54,9 +54,9 @@ namespace Arc.Core.Player {
                     StartPosition = attackTransform.Position,
                     Direction = attackDirection,
                     MaxDistanceSq = math.square(10),
-                    MoveSpeed = 7,
+                    MoveSpeed = 20,
                     MaxTargets = 3,
-                    Damage = 5,
+                    Damage = 35,
                 };
                 ecb.SetComponent(attackEntity, damageDealerData);
 
