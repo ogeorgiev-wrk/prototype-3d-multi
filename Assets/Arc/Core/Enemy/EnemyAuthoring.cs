@@ -12,6 +12,9 @@ namespace Arc.Core.Enemy {
                 AddComponent(entity, new EnemyTag());
                 AddComponent(entity, new EnemyTargetPosition());
                 AddComponent(entity, new MaterialColorData());
+                AddComponent(entity, new EnemyMesh() {
+                    MeshEntity = GetEntity(authoring.MeshGameObject, TransformUsageFlags.Dynamic),
+                });
             }
         }
     }
@@ -25,5 +28,9 @@ namespace Arc.Core.Enemy {
 
     public struct MaterialColorData : IComponentData {
         [GhostField] public float4 Value; // RGBA Color
+    }
+
+    public struct EnemyMesh : IComponentData {
+        public Entity MeshEntity;
     }
 }

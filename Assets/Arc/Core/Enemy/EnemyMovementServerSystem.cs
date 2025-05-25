@@ -10,21 +10,17 @@ using Unity.Rendering;
 
 namespace Arc.Core.Enemy {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
-    public partial class UpdateMaterialColorSystem : SystemBase {
-        protected override void OnUpdate() {
-            Entities.ForEach((ref URPMaterialPropertyBaseColor baseColor, in MaterialColorData colorData) =>
-            {
-                baseColor.Value = colorData.Value;
-            }).Schedule();
+    partial struct UpdateMaterialColorSystem : ISystem {
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state) {
+
+            foreach (var (meshContainer, colorData) in SystemAPI.Query<RefRW<EnemyMesh>, RefRO<MaterialColorData>>()) {
+                var meshColor = SystemAPI.GetComponentRW<URPMaterialPropertyBaseColor>(meshContainer.ValueRO.MeshEntity);
+                meshColor.ValueRW.Value = colorData.ValueRO.Value;
+            }
+
         }
     }
-
-
-
-
-
-
-
 
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     partial struct EnemyMovementServerSystem : ISystem {

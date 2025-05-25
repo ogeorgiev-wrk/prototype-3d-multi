@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71ac09ab3205f654db7891a654f43744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyPrefabGameObject: {fileID: 3916601303676411153, guid: ea42a2f6871280d49bf595bc936252cd, type: 3}
+  EnemyPrefabGameObject: {fileID: 3916601303676411153, guid: c80bc364bd92e464eb8b4f07de5d0291, type: 3}
   SpawnRate: 2
   SpawnRadiusMin: 1
   SpawnRadiusMax: 3
