@@ -19,9 +19,12 @@ namespace Arc.Core.Damage {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var deltaTime = SystemAPI.Time.DeltaTime;
 
-            foreach (var (dealerState, entity) in SystemAPI.Query<RefRO<DamageDealerState>>().WithEntityAccess()) {
-                if (!dealerState.ValueRO.IsMaxRange) continue;
-                ecb.SetComponentEnabled<DamageDealerDestroyFlag>(entity, true);
+            foreach (var (dealerState, dealerData, dealerBuffer, entity) in SystemAPI.Query<RefRO<DamageDealerState>, RefRO<DamageDealerData>, DynamicBuffer<DamageDealerBuffer>>().WithEntityAccess()) {
+                bool shouldDestroy = false;
+                if (dealerState.ValueRO.DistanceCurrentSq >= dealerData.ValueRO.MaxDistanceSq) shouldDestroy = true;
+                if (dealerBuffer.Length >= dealerData.ValueRO.MaxTargets) shouldDestroy = true;
+
+                if (shouldDestroy) ecb.SetComponentEnabled<DamageDealerDestroyFlag>(entity, true);
             }
 
             foreach (var (_, entity) in SystemAPI.Query<EnabledRefRO<DamageDealerDestroyFlag>>().WithEntityAccess()) {
@@ -48,23 +51,15 @@ namespace Arc.Core.Damage {
     public partial struct DamageDealerMovementJob : IJobEntity {
         public float DeltaTime;
         public void Execute(ref PhysicsVelocity physicsVelocity, ref DamageDealerState dealerState, in DamageDealerData dealerData, in LocalTransform transform) {
-            if (dealerState.Direction.Equals(float3.zero)) return;
+            if (dealerData.Direction.Equals(float3.zero)) return;
             if (dealerData.MoveSpeed == 0f) return;
-            if (dealerState.IsMaxRange) return;
 
+            var targetVelocity = math.normalize(dealerData.Direction) * dealerData.MoveSpeed;
+            physicsVelocity.Linear = targetVelocity;
             physicsVelocity.Angular = float3.zero;
 
-            var currentDistanceSq = math.distancesq(transform.Position, dealerState.StartPosition);
-            if (currentDistanceSq >= dealerData.RangeSq) {
-                dealerState.IsMaxRange = true;
-                physicsVelocity.Linear = float3.zero;
-                return;
-            }
-
-            float3 moveDirectionNormalized = math.normalize(dealerState.Direction);
-
-            var targetVelocity = moveDirectionNormalized * dealerData.MoveSpeed;
-            physicsVelocity.Linear = targetVelocity;
+            var currentDistanceSq = math.distancesq(transform.Position, dealerData.StartPosition);
+            dealerState.DistanceCurrentSq = currentDistanceSq;
         }
     }
 }

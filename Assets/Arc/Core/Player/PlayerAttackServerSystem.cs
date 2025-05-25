@@ -1,4 +1,3 @@
-using Arc.Core.Unit;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.NetCode;
@@ -51,10 +50,15 @@ namespace Arc.Core.Player {
                 
 
                 ecb.SetComponent(attackEntity, attackTransform);
-                ecb.SetComponent(attackEntity, new DamageDealerState() {
+                var damageDealerData = new DamageDealerData() {
                     StartPosition = attackTransform.Position,
                     Direction = attackDirection,
-                });
+                    MaxDistanceSq = math.square(10),
+                    MoveSpeed = 7,
+                    MaxTargets = 3,
+                    Damage = 5,
+                };
+                ecb.SetComponent(attackEntity, damageDealerData);
 
                 playerTransform.ValueRW.Scale = isAttacking ? 1.2f : 1f;
             }

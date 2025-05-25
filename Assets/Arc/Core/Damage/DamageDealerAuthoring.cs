@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Arc.Core.Damage {
     public class DamageDealerAuthoring : MonoBehaviour {
-        public float Range;
-        public float MoveSpeed;
+        public float MaxDistance;
         public int MaxTargets = 1;
+        public float MoveSpeed;        
         public int Damage;
 
         public class Baker : Baker<DamageDealerAuthoring> {
@@ -17,7 +17,7 @@ namespace Arc.Core.Damage {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new DamageDealerTag());
                 AddComponent(entity, new DamageDealerData() {
-                    RangeSq = math.square(authoring.Range),
+                    MaxDistanceSq = math.square(authoring.MaxDistance),
                     MoveSpeed = authoring.MoveSpeed,
                     MaxTargets = authoring.MaxTargets,
                     Damage = authoring.Damage,
@@ -35,16 +35,16 @@ namespace Arc.Core.Damage {
     }
 
     public struct DamageDealerData : IComponentData {
-        public float RangeSq;
+        public float3 StartPosition;
+        public float3 Direction;
+        public float MaxDistanceSq;
         public float MoveSpeed;
         public int MaxTargets;
         public int Damage;
     }
 
     public struct DamageDealerState : IComponentData {
-        public float3 StartPosition;
-        public float3 Direction;
-        public bool IsMaxRange;
+        public float DistanceCurrentSq;
     }
 
     public struct DamageDealerBuffer : IBufferElementData {

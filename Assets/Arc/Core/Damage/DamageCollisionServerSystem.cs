@@ -21,15 +21,27 @@ namespace Arc.Core.Damage {
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            var collisionJob = new DamageCollisionJob() {
+            var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
+            simulationSingleton.AsSimulation().FinalJobHandle.Complete();
+
+            var elapsedTime = SystemAPI.Time.ElapsedTime;
+
+            var collisionTriggerJob = new DamageCollisionTriggerJob() {
+                ElapsedTime = elapsedTime,
+
                 DealerDataLookup = SystemAPI.GetComponentLookup<DamageDealerData>(true),
-                DealerDestroyFlagLookup = SystemAPI.GetComponentLookup<DamageDealerDestroyFlag>(false),
                 DealerBufferLookup = SystemAPI.GetBufferLookup<DamageDealerBuffer>(false),
+
+                ReceiverCollisionTimeLookup = SystemAPI.GetComponentLookup<DamageReceiverCollisionTime>(false),
                 ReceiverBufferLookup = SystemAPI.GetBufferLookup<DamageReceiverBuffer>(false),
             };
+            var collisionTriggerHandle = collisionTriggerJob.Schedule(simulationSingleton, state.Dependency);
+            collisionTriggerHandle.Complete();
 
-            var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
-            state.Dependency = collisionJob.Schedule(simulationSingleton, state.Dependency);
+            var collisionStateJob = new DamageCollisionStateJob() {
+                ElapsedTime = elapsedTime,
+            };
+            collisionStateJob.ScheduleParallel();
         }
 
         [BurstCompile]
@@ -39,10 +51,42 @@ namespace Arc.Core.Damage {
     }
 
     [BurstCompile]
-    public partial struct DamageCollisionJob : ITriggerEventsJob {
+    public partial struct DamageCollisionStateJob : IJobEntity {
+        [ReadOnly] public double ElapsedTime;
+
+        public void Execute(ref DamageReceiverCollisionState collisionState, in DamageReceiverCollisionTime collisionTime) {
+            bool isCollision = collisionTime.Value == ElapsedTime;
+
+            var newState = CollisionState.None;
+
+            if (isCollision && collisionState.Value == CollisionState.None) {
+                newState = CollisionState.Enter;
+            }
+
+            if (isCollision && collisionState.Value == CollisionState.Enter) {
+                newState = CollisionState.Inside;
+            }
+
+            if (isCollision && collisionState.Value == CollisionState.Inside) {
+                newState = CollisionState.Inside;
+            }
+
+            if (!isCollision && collisionState.Value == CollisionState.Inside) {
+                newState = CollisionState.Exit;
+            }
+
+            collisionState.Value = newState;
+        }
+    }
+
+    [BurstCompile]
+    public partial struct DamageCollisionTriggerJob : ITriggerEventsJob {
+        [ReadOnly] public double ElapsedTime;
+
         [ReadOnly] public ComponentLookup<DamageDealerData> DealerDataLookup;
-        public ComponentLookup<DamageDealerDestroyFlag> DealerDestroyFlagLookup;
         public BufferLookup<DamageDealerBuffer> DealerBufferLookup;
+
+        public ComponentLookup<DamageReceiverCollisionTime> ReceiverCollisionTimeLookup;
         public BufferLookup<DamageReceiverBuffer> ReceiverBufferLookup;
 
         public void Execute(TriggerEvent triggerEvent) {
@@ -71,8 +115,10 @@ namespace Arc.Core.Damage {
 
             
             var dealerData = DealerDataLookup[dealerEntity];
-            var receiverBuffer = ReceiverBufferLookup[receiverEntity];
             var dealerBuffer = DealerBufferLookup[dealerEntity];
+
+            var receiverBuffer = ReceiverBufferLookup[receiverEntity];
+            ReceiverCollisionTimeLookup[receiverEntity] = new DamageReceiverCollisionTime() { Value = ElapsedTime };
 
             var dealerBufferArray = DealerBufferLookup[dealerEntity].AsNativeArray();
             for (int i = 0; i < dealerBufferArray.Length; i++) {
@@ -86,15 +132,6 @@ namespace Arc.Core.Damage {
             if (dealerBuffer.Length <= dealerData.MaxTargets) {
                 receiverBuffer.Add(new DamageReceiverBuffer() { Value = dealerData.Damage });
             }
-
-            
-            
-
-            /*
-            if (dealerBuffer.Length >= dealerData.MaxTargets) {
-                DealerDestroyFlagLookup.SetComponentEnabled(dealerEntity, true);
-            }
-            */
         }
     }
 }

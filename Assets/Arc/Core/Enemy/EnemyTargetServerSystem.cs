@@ -1,4 +1,6 @@
 using Arc.Core.Player;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -47,5 +49,6 @@ namespace Arc.Core.Enemy {
 
             targetPosition.Value = closestPosition;
         }
+
     }
 }
