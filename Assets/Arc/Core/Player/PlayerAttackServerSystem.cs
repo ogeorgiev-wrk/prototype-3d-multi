@@ -36,7 +36,7 @@ namespace Arc.Core.Player {
                     attackState.ValueRW.Cooldown = 0f;
                     continue;
                 }
-
+                
                 attackState.ValueRW.Cooldown -= deltaTime;
                 if (attackState.ValueRW.Cooldown > 0) continue;
                 attackState.ValueRW.Cooldown = attackData.ValueRO.AttackRate;                
