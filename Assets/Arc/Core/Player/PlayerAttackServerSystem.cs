@@ -53,12 +53,13 @@ namespace Arc.Core.Player {
                 var damageDealerData = new DamageDealerData() {
                     StartPosition = attackTransform.Position,
                     Direction = attackDirection,
-                    MaxDistanceSq = math.square(.05f),
-                    MoveSpeed = .1f,
+                    MaxDistanceSq = math.square(0.05f),
+                    MoveSpeed = 0.10f,
                     MaxTargets = 3,
                     Damage = 35,
                 };
                 ecb.SetComponent(attackEntity, damageDealerData);
+
 
                 playerTransform.ValueRW.Scale = isAttacking ? 1.2f : 1f;
             }
