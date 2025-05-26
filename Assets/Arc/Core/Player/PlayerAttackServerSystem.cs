@@ -53,8 +53,8 @@ namespace Arc.Core.Player {
                 var damageDealerData = new DamageDealerData() {
                     StartPosition = attackTransform.Position,
                     Direction = attackDirection,
-                    MaxDistanceSq = math.square(10),
-                    MoveSpeed = 20,
+                    MaxDistanceSq = math.square(.05f),
+                    MoveSpeed = .1f,
                     MaxTargets = 3,
                     Damage = 35,
                 };

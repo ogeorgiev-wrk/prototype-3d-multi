@@ -22,7 +22,7 @@ namespace Arc.Core.Damage {
             foreach (var (dealerState, dealerData, dealerBuffer, entity) in SystemAPI.Query<RefRO<DamageDealerState>, RefRO<DamageDealerData>, DynamicBuffer<DamageDealerBuffer>>().WithEntityAccess()) {
                 bool shouldDestroy = false;
                 if (dealerState.ValueRO.DistanceCurrentSq >= dealerData.ValueRO.MaxDistanceSq) shouldDestroy = true;
-                if (dealerBuffer.Length >= dealerData.ValueRO.MaxTargets) shouldDestroy = true;
+                //if (dealerBuffer.Length >= dealerData.ValueRO.MaxTargets) shouldDestroy = true;
 
                 if (shouldDestroy) ecb.SetComponentEnabled<DamageDealerDestroyFlag>(entity, true);
             }
