@@ -273,6 +273,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackOrigin: {fileID: 1818435594536851420}
   AttackRate: 0.2
+  AttackModifiers:
+    Damage: 1
+    MoveSpeed: 1
+    MaxTargets: 1
+    Lifetime: 1
+    MaxDistance: 1
 --- !u!114 &8341323996659867541
 MonoBehaviour:
   m_ObjectHideFlags: 0

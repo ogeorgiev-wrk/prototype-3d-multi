@@ -26,7 +26,7 @@ namespace Arc.Core.Player {
                 input.ValueRW.Value = (float2)movementInput;
             }
 
-            foreach (var input in SystemAPI.Query<RefRW<PlayerLookInput>>().WithAll<GhostOwnerIsLocal>()) {
+            foreach (var input in SystemAPI.Query<RefRW<PlayerTargetInput>>().WithAll<GhostOwnerIsLocal>()) {
                 var lookInput = MouseWorldPositionSingleton.Instance.GetPosition();
                 input.ValueRW.Value = (float3)lookInput;
             }

@@ -21,22 +21,23 @@ namespace Arc.Core.Damage {
 
             foreach (var (dealerState, dealerData, dealerBuffer, entity) in SystemAPI.Query<RefRO<DamageDealerState>, RefRO<DamageDealerData>, DynamicBuffer<DamageDealerBuffer>>().WithEntityAccess()) {
                 bool shouldDestroy = false;
-                if (dealerState.ValueRO.DistanceCurrentSq >= dealerData.ValueRO.MaxDistanceSq) shouldDestroy = true;
-                //if (dealerBuffer.Length >= dealerData.ValueRO.MaxTargets) shouldDestroy = true;
+                if (dealerState.ValueRO.CurrentDistanceSq >= math.square(dealerData.ValueRO.ModifiedParams.MaxDistance)) shouldDestroy = true;
+                if (dealerBuffer.Length >= dealerData.ValueRO.ModifiedParams.MaxTargets) shouldDestroy = true;
+                if (dealerState.ValueRO.CurrentLifetime >= dealerData.ValueRO.ModifiedParams.MaxLifetime) shouldDestroy = true;
 
                 if (shouldDestroy) ecb.SetComponentEnabled<DamageDealerDestroyFlag>(entity, true);
             }
 
             foreach (var (_, entity) in SystemAPI.Query<EnabledRefRO<DamageDealerDestroyFlag>>().WithEntityAccess()) {
-                ecb.DestroyEntity(entity);
+                //ecb.DestroyEntity(entity);
             }
 
             ecb.Playback(state.EntityManager);
 
-            var movementJob = new DamageDealerMovementJob() {
+            var stateUpdateJob = new DamageDealerStateUpdateJob() {
                 DeltaTime = deltaTime,
             };
-            movementJob.ScheduleParallel();
+            stateUpdateJob.ScheduleParallel();
         }
 
         [BurstCompile]
@@ -48,18 +49,17 @@ namespace Arc.Core.Damage {
     [BurstCompile]
     [WithAll(typeof(DamageDealerTag))]
     [WithDisabled(typeof(DamageDealerDestroyFlag))] 
-    public partial struct DamageDealerMovementJob : IJobEntity {
+    public partial struct DamageDealerStateUpdateJob : IJobEntity {
         public float DeltaTime;
         public void Execute(ref PhysicsVelocity physicsVelocity, ref DamageDealerState dealerState, in DamageDealerData dealerData, in LocalTransform transform) {
-            if (dealerData.Direction.Equals(float3.zero)) return;
-            if (dealerData.MoveSpeed == 0f) return;
-
-            var targetVelocity = math.normalize(dealerData.Direction) * dealerData.MoveSpeed;
+            var targetVelocity = math.normalize(dealerData.Direction) * dealerData.ModifiedParams.MoveSpeed;
             physicsVelocity.Linear = targetVelocity;
             physicsVelocity.Angular = float3.zero;
 
             var currentDistanceSq = math.distancesq(transform.Position, dealerData.StartPosition);
-            dealerState.DistanceCurrentSq = currentDistanceSq;
+            dealerState.CurrentDistanceSq = currentDistanceSq;
+
+            dealerState.CurrentLifetime += DeltaTime;
         }
     }
 }

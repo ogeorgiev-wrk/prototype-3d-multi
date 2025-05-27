@@ -31,8 +31,8 @@ namespace Arc.Core.Player {
     [BurstCompile]
     [WithAll(typeof(PlayerTag), typeof(Simulate))]
     public partial struct PlayerRotationJob : IJobEntity {
-        public void Execute(ref UnitLookDirection lookDirection, in PlayerLookInput input, in LocalTransform transform) {
-            var direction = input.Value - transform.Position;
+        public void Execute(ref UnitLookDirection lookDirection, in PlayerTargetInput targetInput, in LocalTransform transform) {
+            var direction = targetInput.Value - transform.Position;
             lookDirection.Value = direction;
         }
     }

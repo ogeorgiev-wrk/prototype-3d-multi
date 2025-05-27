@@ -129,8 +129,8 @@ namespace Arc.Core.Damage {
 
             dealerBuffer.Add(new DamageDealerBuffer() { Value = receiverIndex });
 
-            if (dealerBuffer.Length <= dealerData.MaxTargets) {
-                receiverBuffer.Add(new DamageReceiverBuffer() { Value = dealerData.Damage });
+            if (dealerBuffer.Length <= dealerData.ModifiedParams.MaxTargets) {
+                receiverBuffer.Add(new DamageReceiverBuffer() { Value = dealerData.ModifiedParams.Damage });
             }
         }
     }

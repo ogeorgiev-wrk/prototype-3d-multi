@@ -1,15 +1,23 @@
+using System;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace Arc.Core.Damage {
     public class DamageDealerAuthoring : MonoBehaviour {
+        public DamageDealerSource Source;
+        public DamageDealerParams Params;
+
         public class Baker : Baker<DamageDealerAuthoring> {
             public override void Bake(DamageDealerAuthoring authoring) {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new DamageDealerTag());
                 AddComponent(entity, new DamageDealerData());
                 AddComponent(entity, new DamageDealerState());
+                AddComponent(entity, new DamageDealerSetup() {
+                    Source = authoring.Source,
+                    BaseParams = authoring.Params,
+                });
                 AddBuffer<DamageDealerBuffer>(entity);
                 AddComponent(entity, new DamageDealerDestroyFlag());
                 SetComponentEnabled<DamageDealerDestroyFlag>(entity, false);
@@ -21,17 +29,21 @@ namespace Arc.Core.Damage {
 
     }
 
+    public struct DamageDealerSetup : IComponentData {
+        public DamageDealerSource Source;
+        public DamageDealerParams BaseParams;
+    }
+
     public struct DamageDealerData : IComponentData {
         public float3 StartPosition;
         public float3 Direction;
-        public float MaxDistanceSq;
-        public float MoveSpeed;
-        public int MaxTargets;
-        public int Damage;
+        public DamageDealerParams ModifiedParams;
     }
 
     public struct DamageDealerState : IComponentData {
-        public float DistanceCurrentSq;
+        public float3 CurrentPosition;
+        public float CurrentDistanceSq;
+        public float CurrentLifetime;
     }
 
     public struct DamageDealerBuffer : IBufferElementData {
@@ -40,5 +52,21 @@ namespace Arc.Core.Damage {
 
     public struct DamageDealerDestroyFlag : IComponentData, IEnableableComponent {
 
+    }
+
+    [Serializable]
+    public enum DamageDealerSource {
+        NONE = 0,
+        ORIGIN = 1,
+        TARGET = 2
+    }
+
+    [Serializable]
+    public struct DamageDealerParams {
+        public int Damage;
+        public float MoveSpeed;
+        public int MaxTargets;
+        public float MaxDistance;
+        public float MaxLifetime;
     }
 }

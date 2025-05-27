@@ -24,28 +24,27 @@ namespace Arc.Core.Player {
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var deltaTime = SystemAPI.Time.DeltaTime;
 
-            foreach (var (playerTransform, attackState, attackData, lookInput, attackInput) in 
-                SystemAPI.Query<RefRW<LocalTransform>, RefRW<PlayerAttackState>, RefRO<PlayerAttackData>, RefRO<PlayerLookInput>, RefRO<PlayerAttackInput>>().WithAll<PlayerTag, Simulate>()) {
+            foreach (var (playerTransform, attackState, attackData, targetInput, attackInput) in 
+                SystemAPI.Query<RefRW<LocalTransform>, RefRW<PlayerAttackState>, RefRO<PlayerAttackData>, RefRO<PlayerTargetInput>, RefRO<PlayerAttackInput>>().WithAll<PlayerTag, Simulate>()) {
                 if (!networkTime.IsFinalFullPredictionTick) continue;
 
                 var isAttacking = attackInput.ValueRO.Value.IsSet;
 
-
                 if (!isAttacking) {
                     playerTransform.ValueRW.Scale = 1f;
-                    attackState.ValueRW.Cooldown = 0f;
                     continue;
                 }
-                
-                attackState.ValueRW.Cooldown -= deltaTime;
-                if (attackState.ValueRW.Cooldown > 0) continue;
-                attackState.ValueRW.Cooldown = attackData.ValueRO.AttackRate;                
-                
 
-                var attackEntity = ecb.Instantiate(entitiesReferences.AttackPrefabEntity);
-                var attackOriginPosition = playerTransform.ValueRO.TransformPoint(attackData.ValueRO.Origin);
+                var attackEntity = state.EntityManager.Instantiate(entitiesReferences.AttackPrefabEntity);
+                var attackSetup = state.EntityManager.GetComponentData<DamageDealerSetup>(attackEntity);
+                var attackSource = attackSetup.Source;
+                var attackBaseParams = attackSetup.BaseParams;
 
-                var attackDirection = lookInput.ValueRO.Value - playerTransform.ValueRO.Position;
+                var attackModifiers = attackState.ValueRO.Modifiers;
+
+                var attackOriginPosition = attackSetup.Source == DamageDealerSource.TARGET ? targetInput.ValueRO.Value : playerTransform.ValueRO.TransformPoint(attackData.ValueRO.Origin);
+
+                var attackDirection = targetInput.ValueRO.Value - playerTransform.ValueRO.Position;
                 var attackTransform = LocalTransform.FromPositionRotation(attackOriginPosition, quaternion.LookRotation(attackDirection, math.up()));
                 
 
@@ -53,10 +52,13 @@ namespace Arc.Core.Player {
                 var damageDealerData = new DamageDealerData() {
                     StartPosition = attackTransform.Position,
                     Direction = attackDirection,
-                    MaxDistanceSq = math.square(0.05f),
-                    MoveSpeed = 0.10f,
-                    MaxTargets = 3,
-                    Damage = 35,
+                    ModifiedParams = new DamageDealerParams() {
+                        Damage = attackBaseParams.Damage * attackModifiers.Damage,
+                        MoveSpeed = attackBaseParams.MoveSpeed * attackModifiers.MoveSpeed,
+                        MaxTargets = attackBaseParams.MaxTargets * attackModifiers.MaxTargets,
+                        MaxDistance = attackBaseParams.MaxDistance * attackModifiers.MaxDistance,
+                        MaxLifetime = attackBaseParams.MaxLifetime * attackModifiers.Lifetime,
+                    }
                 };
                 ecb.SetComponent(attackEntity, damageDealerData);
 

@@ -17,13 +17,6 @@ namespace Arc.Core.Player {
         public void OnUpdate(ref SystemState state) {
             var playerMovementJob = new PlayerMovementJob();
             playerMovementJob.ScheduleParallel();
-
-            /*
-            foreach (var (movementDirection, playerInput) in SystemAPI.Query<RefRW<UnitMovementDirection>, RefRO<PlayerInput>>().WithAll<Simulate>()) {
-                var inputVector = playerInput.ValueRO.MovementInput;
-                movementDirection.ValueRW.Value = new float3(inputVector.x, 0, inputVector.y);
-            }
-            */
         }
 
         [BurstCompile]
