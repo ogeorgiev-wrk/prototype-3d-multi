@@ -149,7 +149,7 @@ VisualEffect:
   m_PropertySheet:
     m_Float:
       m_Array:
-      - m_Value: 2
+      - m_Value: 1
         m_Name: Duration
         m_Overridden: 1
     m_Vector2f:
@@ -467,4 +467,4 @@ MonoBehaviour:
     MoveSpeed: 0
     MaxTargets: 5
     MaxDistance: 0
-    MaxLifetime: 2
+    MaxLifetime: 1

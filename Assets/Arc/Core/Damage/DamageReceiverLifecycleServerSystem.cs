@@ -16,30 +16,39 @@ namespace Arc.Core.Damage {
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var ecb = new EntityCommandBuffer(Allocator.TempJob);
 
-            foreach (var (receiverState, receiverBuffer, entity) in SystemAPI.Query<RefRW<DamageReceiverState>, DynamicBuffer<DamageReceiverBuffer>>().WithPresent<DamageReceiverDestroyFlag>().WithEntityAccess()) {
-                if (receiverBuffer.IsEmpty) continue;
-                foreach (var damage in receiverBuffer) {
-                    receiverState.ValueRW.HealthCurrent -= damage.Value;
-                }
-                receiverBuffer.Clear();
-
-                if (receiverState.ValueRW.HealthCurrent <= 0) {
-                    ecb.SetComponentEnabled<DamageReceiverDestroyFlag>(entity, true);
-                }
-            }
-
-            foreach (var (_, entity) in SystemAPI.Query<EnabledRefRO<DamageReceiverDestroyFlag>>().WithEntityAccess()) {
-                ecb.DestroyEntity(entity);
-            }
+            var lifecycleJob = new DamageReceiverLifecycleJob() {
+                ecbParallel = ecb.AsParallelWriter()
+            };
+            lifecycleJob.ScheduleParallel();
+            state.Dependency.Complete();
 
             ecb.Playback(state.EntityManager);
+            ecb.Dispose();
         }
 
         [BurstCompile]
         public void OnDestroy(ref SystemState state) {
 
+        }
+    }
+
+    [BurstCompile]
+    [WithAll(typeof(DamageReceiverTag))]
+    public partial struct DamageReceiverLifecycleJob : IJobEntity {
+        public EntityCommandBuffer.ParallelWriter ecbParallel;
+        public void Execute([ChunkIndexInQuery] int sortKey, ref DamageReceiverState receiverState, ref DynamicBuffer<DamageReceiverBuffer> receiverBuffer, Entity entity) {
+            if (receiverBuffer.IsEmpty) return;
+            foreach (var damage in receiverBuffer) {
+                receiverState.HealthCurrent -= damage.Value;
+            }
+            receiverBuffer.Clear();
+
+            if (receiverState.HealthCurrent <= 0) {
+                ecbParallel.SetComponentEnabled<DamageReceiverNoCollisionFlag>(sortKey, entity, true);
+                ecbParallel.DestroyEntity(sortKey, entity);
+            }
         }
     }
 }

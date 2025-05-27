@@ -50,6 +50,7 @@ namespace Arc.Core.Connect {
 
 
             ecb.Playback(state.EntityManager);
+            ecb.Dispose();
         }
 
         [BurstCompile]

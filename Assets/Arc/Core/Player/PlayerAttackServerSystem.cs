@@ -79,6 +79,7 @@ namespace Arc.Core.Player {
             }
 
             ecb.Playback(state.EntityManager);
+            ecb.Dispose();
         }
 
         [BurstCompile]

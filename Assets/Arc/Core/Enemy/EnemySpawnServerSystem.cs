@@ -39,6 +39,7 @@ namespace Arc.Core.Enemy {
             }
 
             ecb.Playback(state.EntityManager);
+            ecb.Dispose();
         }
 
         [BurstCompile]

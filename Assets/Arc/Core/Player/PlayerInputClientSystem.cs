@@ -5,6 +5,7 @@ using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 using Arc.Core.Input;
+using Unity.VisualScripting;
 
 namespace Arc.Core.Player {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
@@ -18,9 +19,17 @@ namespace Arc.Core.Player {
         [BurstCompile]
         protected override void OnCreate() {
             _inputActions = new PlayerInputActions();
-            _inputActions.Enable();
-
             _weaponCount = 3;
+        }
+
+        [BurstCompile]
+        protected override void OnStartRunning() {
+            _inputActions.Enable();
+        }
+
+        [BurstCompile]
+        protected override void OnStopRunning() {
+            _inputActions.Disable();
         }
 
         [BurstCompile]
@@ -54,6 +63,11 @@ namespace Arc.Core.Player {
                 if (_weaponIndex == _weaponCount) _weaponIndex = 0;
                 input.ValueRW.Value = _weaponIndex;
             }
+        }
+
+        [BurstCompile]
+        protected override void OnDestroy() {
+
         }
     }
 }

@@ -30,9 +30,11 @@ namespace Arc.Core.Damage {
                 ElapsedTime = elapsedTime,
 
                 DealerDataLookup = SystemAPI.GetComponentLookup<DamageDealerData>(true),
+                DealerNoCollisionFlag = SystemAPI.GetComponentLookup<DamageDealerNoCollisionFlag>(true),
                 DealerBufferLookup = SystemAPI.GetBufferLookup<DamageDealerBuffer>(false),
 
                 ReceiverCollisionTimeLookup = SystemAPI.GetComponentLookup<DamageReceiverCollisionTime>(false),
+                ReceiverNoCollisionFlag = SystemAPI.GetComponentLookup<DamageReceiverNoCollisionFlag>(true),
                 ReceiverBufferLookup = SystemAPI.GetBufferLookup<DamageReceiverBuffer>(false),
             };
             var collisionTriggerHandle = collisionTriggerJob.Schedule(simulationSingleton, state.Dependency);
@@ -84,9 +86,11 @@ namespace Arc.Core.Damage {
         [ReadOnly] public double ElapsedTime;
 
         [ReadOnly] public ComponentLookup<DamageDealerData> DealerDataLookup;
+        [ReadOnly] public ComponentLookup<DamageDealerNoCollisionFlag> DealerNoCollisionFlag;
         public BufferLookup<DamageDealerBuffer> DealerBufferLookup;
 
         public ComponentLookup<DamageReceiverCollisionTime> ReceiverCollisionTimeLookup;
+        [ReadOnly] public ComponentLookup<DamageReceiverNoCollisionFlag> ReceiverNoCollisionFlag;
         public BufferLookup<DamageReceiverBuffer> ReceiverBufferLookup;
 
         public void Execute(TriggerEvent triggerEvent) {
@@ -113,6 +117,8 @@ namespace Arc.Core.Damage {
                 return;
             }
 
+            //bool ignoreCollisions = DealerNoCollisionFlag.IsComponentEnabled(dealerEntity) || ReceiverNoCollisionFlag.IsComponentEnabled(receiverEntity);
+            //if (ignoreCollisions) return;
             
             var dealerData = DealerDataLookup[dealerEntity];
             var dealerBuffer = DealerBufferLookup[dealerEntity];

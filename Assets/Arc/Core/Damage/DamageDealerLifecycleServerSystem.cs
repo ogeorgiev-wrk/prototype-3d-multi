@@ -16,23 +16,17 @@ namespace Arc.Core.Damage {
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            var ecb = new EntityCommandBuffer(Allocator.Temp);
+            var ecb = new EntityCommandBuffer(Allocator.TempJob);
             var deltaTime = SystemAPI.Time.DeltaTime;
 
-            foreach (var (dealerState, dealerData, dealerBuffer, entity) in SystemAPI.Query<RefRO<DamageDealerState>, RefRO<DamageDealerData>, DynamicBuffer<DamageDealerBuffer>>().WithEntityAccess()) {
-                bool shouldDestroy = false;
-                if (dealerState.ValueRO.CurrentDistanceSq > math.square(dealerData.ValueRO.ModifiedParams.MaxDistance)) shouldDestroy = true;
-                //if (dealerBuffer.Length >= dealerData.ValueRO.ModifiedParams.MaxTargets) shouldDestroy = true;
-                if (dealerState.ValueRO.CurrentLifetime > dealerData.ValueRO.ModifiedParams.MaxLifetime) shouldDestroy = true;
-
-                if (shouldDestroy) ecb.SetComponentEnabled<DamageDealerDestroyFlag>(entity, true);
-            }
-
-            foreach (var (_, entity) in SystemAPI.Query<EnabledRefRO<DamageDealerDestroyFlag>>().WithEntityAccess()) {
-                ecb.DestroyEntity(entity);
-            }
+            var lifecycleJob = new DamageDealerLifecycleJob() {
+                ecbParallel = ecb.AsParallelWriter()
+            };
+            lifecycleJob.ScheduleParallel();
+            state.Dependency.Complete();
 
             ecb.Playback(state.EntityManager);
+            ecb.Dispose();
 
             var stateUpdateJob = new DamageDealerStateUpdateJob() {
                 DeltaTime = deltaTime,
@@ -48,7 +42,36 @@ namespace Arc.Core.Damage {
 
     [BurstCompile]
     [WithAll(typeof(DamageDealerTag))]
-    [WithDisabled(typeof(DamageDealerDestroyFlag))] 
+    public partial struct DamageDealerLifecycleJob : IJobEntity {
+        public EntityCommandBuffer.ParallelWriter ecbParallel;
+        public void Execute([ChunkIndexInQuery] int sortKey, in DamageDealerState dealerState, in DamageDealerData dealerData, in DynamicBuffer<DamageDealerBuffer> dealerBuffer, Entity entity) {
+            bool shouldDestroy = false;
+            bool shouldFlag = false;
+
+            if (dealerState.CurrentDistanceSq > math.square(dealerData.ModifiedParams.MaxDistance)) {
+                shouldFlag = true;
+                shouldDestroy = true;
+            }
+            if (dealerBuffer.Length >= dealerData.ModifiedParams.MaxTargets) {
+                shouldFlag = true;
+            }
+            if (dealerState.CurrentLifetime > dealerData.ModifiedParams.MaxLifetime) {
+                shouldFlag = true;
+                shouldDestroy = true;
+            }
+
+            if (shouldFlag) {
+                ecbParallel.SetComponentEnabled<DamageDealerNoCollisionFlag>(sortKey, entity, true);
+            }
+
+            if (shouldDestroy) {
+                ecbParallel.DestroyEntity(sortKey, entity);
+            }
+        }
+    }
+
+    [BurstCompile]
+    [WithAll(typeof(DamageDealerTag))]
     public partial struct DamageDealerStateUpdateJob : IJobEntity {
         public float DeltaTime;
         public void Execute(ref PhysicsVelocity physicsVelocity, ref DamageDealerState dealerState, in DamageDealerData dealerData, in LocalTransform transform) {

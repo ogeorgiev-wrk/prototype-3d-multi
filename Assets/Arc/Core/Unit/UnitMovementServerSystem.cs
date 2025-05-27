@@ -37,5 +37,4 @@ namespace Arc.Core.Unit {
             physicsVelocity.Angular = float3.zero;
         }
     }
-
 }

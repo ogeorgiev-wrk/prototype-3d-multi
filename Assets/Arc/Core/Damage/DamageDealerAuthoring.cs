@@ -19,8 +19,8 @@ namespace Arc.Core.Damage {
                     BaseParams = authoring.Params,
                 });
                 AddBuffer<DamageDealerBuffer>(entity);
-                AddComponent(entity, new DamageDealerDestroyFlag());
-                SetComponentEnabled<DamageDealerDestroyFlag>(entity, false);
+                AddComponent(entity, new DamageDealerNoCollisionFlag());
+                SetComponentEnabled<DamageDealerNoCollisionFlag>(entity, false);
             }
         }
     }
@@ -50,7 +50,7 @@ namespace Arc.Core.Damage {
         public int Value;
     }
 
-    public struct DamageDealerDestroyFlag : IComponentData, IEnableableComponent {
+    public struct DamageDealerNoCollisionFlag : IComponentData, IEnableableComponent {
 
     }
 

@@ -16,8 +16,8 @@ namespace Arc.Core.Damage {
                 AddComponent(entity, new DamageReceiverCollisionState());
                 AddComponent(entity, new DamageReceiverCollisionTime());
                 AddBuffer<DamageReceiverBuffer>(entity);
-                AddComponent(entity, new DamageReceiverDestroyFlag());
-                SetComponentEnabled<DamageReceiverDestroyFlag>(entity, false);
+                AddComponent(entity, new DamageReceiverNoCollisionFlag());
+                SetComponentEnabled<DamageReceiverNoCollisionFlag>(entity, false);
             }
         }
     }
@@ -45,7 +45,7 @@ namespace Arc.Core.Damage {
         public int Value;
     }
 
-    public struct DamageReceiverDestroyFlag : IComponentData, IEnableableComponent {
+    public struct DamageReceiverNoCollisionFlag : IComponentData, IEnableableComponent {
 
     }
 
