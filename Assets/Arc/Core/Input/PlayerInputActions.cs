@@ -119,6 +119,15 @@ namespace Arc.Core.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""WeaponSwap"",
+                    ""type"": ""Value"",
+                    ""id"": ""ea9b1f0f-dd07-41dd-8b43-815bbaebcac2"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -198,6 +207,17 @@ namespace Arc.Core.Input
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""42db635f-9f60-46c9-a474-36d768fac1e7"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WeaponSwap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -209,6 +229,7 @@ namespace Arc.Core.Input
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
             m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
             m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+            m_Player_WeaponSwap = m_Player.FindAction("WeaponSwap", throwIfNotFound: true);
         }
 
         ~@PlayerInputActions()
@@ -292,6 +313,7 @@ namespace Arc.Core.Input
         private readonly InputAction m_Player_Move;
         private readonly InputAction m_Player_Look;
         private readonly InputAction m_Player_Attack;
+        private readonly InputAction m_Player_WeaponSwap;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -315,6 +337,10 @@ namespace Arc.Core.Input
             /// Provides access to the underlying input action "Player/Attack".
             /// </summary>
             public InputAction @Attack => m_Wrapper.m_Player_Attack;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/WeaponSwap".
+            /// </summary>
+            public InputAction @WeaponSwap => m_Wrapper.m_Player_WeaponSwap;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -350,6 +376,9 @@ namespace Arc.Core.Input
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @WeaponSwap.started += instance.OnWeaponSwap;
+                @WeaponSwap.performed += instance.OnWeaponSwap;
+                @WeaponSwap.canceled += instance.OnWeaponSwap;
             }
 
             /// <summary>
@@ -370,6 +399,9 @@ namespace Arc.Core.Input
                 @Attack.started -= instance.OnAttack;
                 @Attack.performed -= instance.OnAttack;
                 @Attack.canceled -= instance.OnAttack;
+                @WeaponSwap.started -= instance.OnWeaponSwap;
+                @WeaponSwap.performed -= instance.OnWeaponSwap;
+                @WeaponSwap.canceled -= instance.OnWeaponSwap;
             }
 
             /// <summary>
@@ -431,6 +463,13 @@ namespace Arc.Core.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnAttack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "WeaponSwap" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnWeaponSwap(InputAction.CallbackContext context);
         }
     }
 }

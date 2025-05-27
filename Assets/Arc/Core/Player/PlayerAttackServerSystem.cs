@@ -14,18 +14,30 @@ namespace Arc.Core.Player {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<NetworkTime>();
-            state.RequireForUpdate<EntitiesReferences>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             var networkTime = SystemAPI.GetSingleton<NetworkTime>();
-            var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var deltaTime = SystemAPI.Time.DeltaTime;
 
-            foreach (var (playerTransform, attackState, attackData, targetInput, attackInput) in 
-                SystemAPI.Query<RefRW<LocalTransform>, RefRW<PlayerAttackState>, RefRO<PlayerAttackData>, RefRO<PlayerTargetInput>, RefRO<PlayerAttackInput>>().WithAll<PlayerTag, Simulate>()) {
+            foreach (var (
+                playerTransform, 
+                attackState, 
+                attackData, 
+                targetInput, 
+                attackInput, 
+                swapInput,
+                attackPrefabBuffer
+                ) in SystemAPI.Query<RefRW<LocalTransform>, 
+                RefRW<PlayerAttackState>, 
+                RefRO<PlayerAttackData>, 
+                RefRO<PlayerTargetInput>, 
+                RefRO<PlayerAttackInput>, 
+                RefRO<PlayerWeaponSwapInput>,
+                DynamicBuffer<PlayerAttackPrefabBuffer>
+                >().WithAll<PlayerTag, Simulate>()) {
                 if (!networkTime.IsFinalFullPredictionTick) continue;
 
                 var isAttacking = attackInput.ValueRO.Value.IsSet;
@@ -35,7 +47,7 @@ namespace Arc.Core.Player {
                     continue;
                 }
 
-                var attackEntity = state.EntityManager.Instantiate(entitiesReferences.AttackPrefabEntity);
+                var attackEntity = state.EntityManager.Instantiate(attackPrefabBuffer[swapInput.ValueRO.Value].Value);
                 var attackSetup = state.EntityManager.GetComponentData<DamageDealerSetup>(attackEntity);
                 var attackSource = attackSetup.Source;
                 var attackBaseParams = attackSetup.BaseParams;

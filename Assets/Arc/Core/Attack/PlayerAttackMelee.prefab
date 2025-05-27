@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &524465699187008819
 Transform:
   m_ObjectHideFlags: 0
@@ -148,7 +148,10 @@ VisualEffect:
   m_ResourceVersion: 1
   m_PropertySheet:
     m_Float:
-      m_Array: []
+      m_Array:
+      - m_Value: 1
+        m_Name: Duration
+        m_Overridden: 1
     m_Vector2f:
       m_Array: []
     m_Vector3f:
@@ -339,7 +342,7 @@ GameObject:
   - component: {fileID: 2018307662776805787}
   - component: {fileID: -30091238917536357}
   m_Layer: 6
-  m_Name: MeleeAttack
+  m_Name: PlayerAttackMelee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -390,7 +393,7 @@ MonoBehaviour:
   SupportedGhostModes: 1
   OptimizationMode: 0
   Importance: 1
-  prefabId: 391fc725d7282d6418ab633b7563950a
+  prefabId: cc3bcec853e91ea49b9e3dbc809ddf9a
   HasOwner: 0
   SupportAutoCommandTarget: 1
   TrackInterpolationDelay: 0
@@ -460,8 +463,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Source: 1
   Params:
-    Damage: 30
-    MoveSpeed: 10
-    MaxTargets: 2
+    Damage: 40
+    MoveSpeed: 0
+    MaxTargets: 4
     MaxDistance: 100
     MaxLifetime: 1

@@ -272,13 +272,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttackOrigin: {fileID: 1818435594536851420}
-  AttackRate: 0.2
   AttackModifiers:
     Damage: 1
     MoveSpeed: 1
     MaxTargets: 1
     Lifetime: 1
     MaxDistance: 1
+  AttackPrefabGameObjectList:
+  - {fileID: 7468307538448741647, guid: cc3bcec853e91ea49b9e3dbc809ddf9a, type: 3}
+  - {fileID: 7468307538448741647, guid: 391fc725d7282d6418ab633b7563950a, type: 3}
+  - {fileID: 7468307538448741647, guid: 60e631ba92f3743428d96f58064a3b0c, type: 3}
 --- !u!114 &8341323996659867541
 MonoBehaviour:
   m_ObjectHideFlags: 0

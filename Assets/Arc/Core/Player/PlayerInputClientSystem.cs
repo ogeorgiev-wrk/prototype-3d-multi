@@ -12,11 +12,15 @@ namespace Arc.Core.Player {
     [BurstCompile]
     public partial class PlayerInputClientSystem : SystemBase {
         private PlayerInputActions _inputActions;
+        private int _weaponIndex;
+        private int _weaponCount;
 
         [BurstCompile]
         protected override void OnCreate() {
             _inputActions = new PlayerInputActions();
             _inputActions.Enable();
+
+            _weaponCount = 3;
         }
 
         [BurstCompile]
@@ -38,6 +42,17 @@ namespace Arc.Core.Player {
                 } else {
                     input.ValueRW.Value = default;
                 }
+            }
+
+            foreach (var input in SystemAPI.Query<RefRW<PlayerWeaponSwapInput>>().WithAll<GhostOwnerIsLocal>()) {
+                var swapInput = _inputActions.Player.WeaponSwap.ReadValue<Vector2>();
+                if (swapInput == Vector2.zero) continue;
+
+                var increment = (int)swapInput.y;
+                _weaponIndex += increment;
+                if (_weaponIndex < 0) _weaponIndex = _weaponCount - 1;
+                if (_weaponIndex == _weaponCount) _weaponIndex = 0;
+                input.ValueRW.Value = _weaponIndex;
             }
         }
     }
