@@ -48,14 +48,14 @@ namespace Arc.Core.Damage {
             bool shouldDestroy = false;
             bool shouldFlag = false;
 
-            if (dealerState.CurrentDistanceSq > math.square(dealerData.ModifiedParams.MaxDistance)) {
+            if (dealerState.DistanceSqCurrent > math.square(dealerData.ModifiedParams.MaxDistance)) {
                 shouldFlag = true;
                 shouldDestroy = true;
             }
             if (dealerBuffer.Length >= dealerData.ModifiedParams.MaxTargets) {
                 shouldFlag = true;
             }
-            if (dealerState.CurrentLifetime > dealerData.ModifiedParams.MaxLifetime) {
+            if (dealerState.LifetimeCurrent > dealerData.ModifiedParams.MaxLifetime) {
                 shouldFlag = true;
                 shouldDestroy = true;
             }
@@ -80,9 +80,9 @@ namespace Arc.Core.Damage {
             physicsVelocity.Angular = float3.zero;
 
             var currentDistanceSq = math.distancesq(transform.Position, dealerData.StartPosition);
-            dealerState.CurrentDistanceSq = currentDistanceSq;
+            dealerState.DistanceSqCurrent = currentDistanceSq;
 
-            dealerState.CurrentLifetime += DeltaTime;
+            dealerState.LifetimeCurrent += DeltaTime;
         }
     }
 }

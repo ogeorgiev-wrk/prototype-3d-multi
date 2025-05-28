@@ -41,9 +41,9 @@ namespace Arc.Core.Damage {
     }
 
     public struct DamageDealerState : IComponentData {
-        public float3 CurrentPosition;
-        public float CurrentDistanceSq;
-        public float CurrentLifetime;
+        public float3 PositionCurrent;
+        public float DistanceSqCurrent;
+        public float LifetimeCurrent;
     }
 
     public struct DamageDealerBuffer : IBufferElementData {

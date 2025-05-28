@@ -15,15 +15,30 @@ namespace Arc.Core.Feedback {
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            foreach (var (shaderState, collisionState) in SystemAPI.Query<RefRW<FeedbackShaderStateOverride>, RefRO<DamageReceiverCollisionState>>()) {
-                bool isCollision = collisionState.ValueRO.Value != CollisionState.None;
-                shaderState.ValueRW.Value = isCollision ? 1 : 0;
-            }
+            var deltaTime = SystemAPI.Time.DeltaTime;
+
+            var lifecycleJob = new FeedbackLifecycleJob() { DeltaTime = deltaTime };
+            lifecycleJob.ScheduleParallel();
         }
 
         [BurstCompile]
         public void OnDestroy(ref SystemState state) {
 
+        }
+    }
+
+    [BurstCompile]
+    public partial struct FeedbackLifecycleJob : IJobEntity {
+        public float DeltaTime;
+        public void Execute(ref FeedbackState feedbackState, ref FeedbackShaderStateOverride shaderState, in FeedbackSetup feedbackSetup, in DynamicBuffer<DamageReceiverBuffer> receiverBuffer) {
+            if (receiverBuffer.Length > 0) {
+                feedbackState.LifetimeCurrent = feedbackSetup.LifetimeMax;
+            }
+            
+            feedbackState.LifetimeCurrent -= DeltaTime;
+
+            bool hasFeedback = feedbackState.LifetimeCurrent > 0;
+            shaderState.Value = hasFeedback ? 1 : 0;
         }
     }
 }

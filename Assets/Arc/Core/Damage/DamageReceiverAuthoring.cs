@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Arc.Core.Damage {
     public class DamageReceiverAuthoring : MonoBehaviour {
-        public int HealthMax;
+        public int HealthMax = 100;
 
         public class Baker : Baker<DamageReceiverAuthoring> {
             public override void Bake(DamageReceiverAuthoring authoring) {
