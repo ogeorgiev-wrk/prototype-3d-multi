@@ -70,6 +70,8 @@ namespace Arc.Core.Player {
                         MaxTargets = attackBaseParams.MaxTargets * attackModifiers.MaxTargets,
                         MaxDistance = attackBaseParams.MaxDistance * attackModifiers.MaxDistance,
                         MaxLifetime = attackBaseParams.MaxLifetime * attackModifiers.Lifetime,
+                        TriggerStart = attackBaseParams.TriggerStart * attackModifiers.Lifetime,
+                        TriggerEnd = attackBaseParams.TriggerEnd * attackModifiers.Lifetime,
                     }
                 };
                 ecb.SetComponent(attackEntity, damageDealerData);

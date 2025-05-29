@@ -89,6 +89,9 @@
         },
         {
             "m_Id": "d889fdc16fa040bf9dd624ca509517d4"
+        },
+        {
+            "m_Id": "850f138f7b644aeaaa41a553a9395061"
         }
     ],
     "m_GroupDatas": [],
@@ -389,6 +392,9 @@
             },
             {
                 "m_Id": "945c74e4c96a4864acc4cb0a38b166ea"
+            },
+            {
+                "m_Id": "850f138f7b644aeaaa41a553a9395061"
             }
         ]
     },
@@ -1435,6 +1441,21 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "749061c4f0224336bf0a66d46b80f57b",
+    "m_Id": 0,
+    "m_DisplayName": "Alpha Clip Threshold",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "AlphaClipThreshold",
+    "m_StageCapability": 2,
+    "m_Value": 0.5,
+    "m_DefaultValue": 0.5,
+    "m_Labels": []
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
     "m_ObjectId": "7f3ae03595bb4ce893bdc38ecb08de8a",
     "m_Group": {
@@ -1514,6 +1535,40 @@
         "m_SerializableColors": []
     },
     "m_SerializedDescriptor": "VertexDescription.Tangent"
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.BlockNode",
+    "m_ObjectId": "850f138f7b644aeaaa41a553a9395061",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "SurfaceDescription.AlphaClipThreshold",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "749061c4f0224336bf0a66d46b80f57b"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_DismissedVersion": 0,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_SerializedDescriptor": "SurfaceDescription.AlphaClipThreshold"
 }
 
 {
@@ -2608,7 +2663,7 @@
     "m_ActiveSubTarget": {
         "m_Id": "045add82cc214e5e869ff0fb40c9f475"
     },
-    "m_AllowMaterialOverride": false,
+    "m_AllowMaterialOverride": true,
     "m_SurfaceType": 1,
     "m_ZTestMode": 4,
     "m_ZWriteControl": 0,

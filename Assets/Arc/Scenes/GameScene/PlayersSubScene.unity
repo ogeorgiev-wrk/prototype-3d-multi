@@ -148,9 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d15f323ab80d09458d85c89a5cec9a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InactiveColor: {r: 1, g: 0, b: 0, a: 1}
-  ActiveColor: {r: 0.69672155, g: 0, b: 1, a: 1}
-  AttackPrefabGameObject: {fileID: 7468307538448741647, guid: 391fc725d7282d6418ab633b7563950a, type: 3}
 --- !u!4 &71198255
 Transform:
   m_ObjectHideFlags: 0
@@ -225,7 +222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7352214946349293432, guid: da2585a2ba7af454c94f7e577b2736c9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.77
+      value: -5.82
       objectReference: {fileID: 0}
     - target: {fileID: 7352214946349293432, guid: da2585a2ba7af454c94f7e577b2736c9, type: 3}
       propertyPath: m_LocalRotation.w

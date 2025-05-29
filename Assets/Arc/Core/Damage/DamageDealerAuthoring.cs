@@ -68,5 +68,7 @@ namespace Arc.Core.Damage {
         public int MaxTargets;
         public float MaxDistance;
         public float MaxLifetime;
+        public float TriggerStart;
+        public float TriggerEnd;
     }
 }

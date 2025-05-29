@@ -7,6 +7,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.Collections;
+using UnityEngine.Assertions.Must;
 
 namespace Arc.Core.Damage {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
@@ -30,7 +31,7 @@ namespace Arc.Core.Damage {
                 ElapsedTime = elapsedTime,
 
                 DealerDataLookup = SystemAPI.GetComponentLookup<DamageDealerData>(true),
-                DealerNoCollisionFlag = SystemAPI.GetComponentLookup<DamageDealerNoCollisionFlag>(true),
+                DealerStateLookup = SystemAPI.GetComponentLookup<DamageDealerState>(false),
                 DealerBufferLookup = SystemAPI.GetBufferLookup<DamageDealerBuffer>(false),
 
                 ReceiverCollisionTimeLookup = SystemAPI.GetComponentLookup<DamageReceiverCollisionTime>(false),
@@ -86,7 +87,7 @@ namespace Arc.Core.Damage {
         [ReadOnly] public double ElapsedTime;
 
         [ReadOnly] public ComponentLookup<DamageDealerData> DealerDataLookup;
-        [ReadOnly] public ComponentLookup<DamageDealerNoCollisionFlag> DealerNoCollisionFlag;
+        public ComponentLookup<DamageDealerState> DealerStateLookup;
         public BufferLookup<DamageDealerBuffer> DealerBufferLookup;
 
         public ComponentLookup<DamageReceiverCollisionTime> ReceiverCollisionTimeLookup;
@@ -116,12 +117,14 @@ namespace Arc.Core.Damage {
             } else {
                 return;
             }
-
-            //bool ignoreCollisions = DealerNoCollisionFlag.IsComponentEnabled(dealerEntity) || ReceiverNoCollisionFlag.IsComponentEnabled(receiverEntity);
-            //if (ignoreCollisions) return;
+                        
             
             var dealerData = DealerDataLookup[dealerEntity];
+            var dealerState = DealerStateLookup[dealerEntity];
             var dealerBuffer = DealerBufferLookup[dealerEntity];
+
+            bool isWithinTrigger = dealerState.LifetimeCurrent >= dealerData.ModifiedParams.TriggerStart && dealerState.LifetimeCurrent <= dealerData.ModifiedParams.TriggerEnd;
+            if (!isWithinTrigger) return;
 
             var receiverBuffer = ReceiverBufferLookup[receiverEntity];
             ReceiverCollisionTimeLookup[receiverEntity] = new DamageReceiverCollisionTime() { Value = ElapsedTime };

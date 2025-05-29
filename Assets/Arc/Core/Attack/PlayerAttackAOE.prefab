@@ -30,7 +30,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7700778429691446254}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 4265966477468529819}
   - component: {fileID: 8595747177306211496}
   m_Layer: 0
-  m_Name: SlashVFX
+  m_Name: VisualEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127,7 +127,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7700778429691446254}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -139,9 +139,9 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4464242549903598933}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 7e7f919a978eded478c0c4f215da3cde, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 6a9c98e2c7ca66a46a4af29254b29a35, type: 3}
   m_InitialEventName: OnPlay
-  m_InitialEventNameOverriden: 0
+  m_InitialEventNameOverriden: 1
   m_StartSeed: 0
   m_ResetSeedOnPlay: 1
   m_AllowInstancing: 1
@@ -463,8 +463,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Source: 2
   Params:
-    Damage: 1
+    Damage: 40
     MoveSpeed: 0
     MaxTargets: 5
     MaxDistance: 0
     MaxLifetime: 1
+    TriggerStart: 0.3
+    TriggerEnd: 1
