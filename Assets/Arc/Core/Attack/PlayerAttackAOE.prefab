@@ -467,6 +467,6 @@ MonoBehaviour:
     MoveSpeed: 0
     MaxTargets: 5
     MaxDistance: 0
-    MaxLifetime: 1
+    MaxLifetime: 2
     TriggerStart: 0.3
-    TriggerEnd: 1
+    TriggerEnd: 0.7

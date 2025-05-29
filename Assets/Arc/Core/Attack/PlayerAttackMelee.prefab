@@ -465,8 +465,8 @@ MonoBehaviour:
   Params:
     Damage: 50
     MoveSpeed: 0
-    MaxTargets: 4
+    MaxTargets: 10
     MaxDistance: 100
-    MaxLifetime: 0.3
+    MaxLifetime: 0.5
     TriggerStart: 0
     TriggerEnd: 0.2
