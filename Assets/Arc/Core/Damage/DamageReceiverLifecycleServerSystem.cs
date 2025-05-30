@@ -17,9 +17,10 @@ namespace Arc.Core.Damage {
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecbParallel = ecb.AsParallelWriter();
 
             var lifecycleJob = new DamageReceiverLifecycleJob() {
-                ecbParallel = ecb.AsParallelWriter()
+                EcbParallel = ecbParallel
             };
             lifecycleJob.ScheduleParallel();
             state.Dependency.Complete();
@@ -37,7 +38,7 @@ namespace Arc.Core.Damage {
     [BurstCompile]
     [WithAll(typeof(DamageReceiverTag))]
     public partial struct DamageReceiverLifecycleJob : IJobEntity {
-        public EntityCommandBuffer.ParallelWriter ecbParallel;
+        public EntityCommandBuffer.ParallelWriter EcbParallel;
         public void Execute([ChunkIndexInQuery] int sortKey, ref DamageReceiverState receiverState, ref DynamicBuffer<DamageReceiverBuffer> receiverBuffer, Entity entity) {
             if (receiverBuffer.IsEmpty) return;
             foreach (var damage in receiverBuffer) {
@@ -46,8 +47,8 @@ namespace Arc.Core.Damage {
             receiverBuffer.Clear();
 
             if (receiverState.HealthCurrent <= 0) {
-                ecbParallel.SetComponentEnabled<DamageReceiverNoCollisionFlag>(sortKey, entity, true);
-                ecbParallel.DestroyEntity(sortKey, entity);
+                EcbParallel.SetComponentEnabled<DamageReceiverNoCollisionFlag>(sortKey, entity, true);
+                EcbParallel.DestroyEntity(sortKey, entity);
             }
         }
     }

@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyPrefabGameObject: {fileID: 3916601303676411153, guid: c80bc364bd92e464eb8b4f07de5d0291, type: 3}
-  SpawnRate: 2
+  SpawnRate: 1
   SpawnRadiusMin: 1
   SpawnRadiusMax: 3
   SpawnSeed: 100
@@ -97,11 +97,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3008295224140776270}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a84e41ed665c1f948a415b79281a44fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HealthContainerGameObject: {fileID: 0}
+  HealthBarGameObject: {fileID: 0}
   HealthMax: 500
 --- !u!114 &2848635008726962080
 MonoBehaviour:
@@ -110,7 +112,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3008295224140776270}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f31762b5c83b29441a42b72fbcf08cb1, type: 3}
   m_Name: 

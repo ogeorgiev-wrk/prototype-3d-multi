@@ -7,7 +7,6 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.Collections;
-using UnityEngine.Assertions.Must;
 
 namespace Arc.Core.Damage {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
