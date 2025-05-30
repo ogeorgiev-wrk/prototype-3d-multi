@@ -469,4 +469,4 @@ MonoBehaviour:
     MaxDistance: 0
     MaxLifetime: 2
     TriggerStart: 0.3
-    TriggerEnd: 0.7
+    TriggerEnd: 0.6
