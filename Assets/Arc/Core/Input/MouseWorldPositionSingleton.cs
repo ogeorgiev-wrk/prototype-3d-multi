@@ -25,13 +25,14 @@ namespace Arc.Core.Input {
             var lookInput = _inputActions.Player.Look.ReadValue<Vector2>();
             var mouseCameraRay = Camera.main.ScreenPointToRay(lookInput);
 
+            /*
             if (Physics.Raycast(mouseCameraRay, out RaycastHit raycastHit)) {
                 return raycastHit.point;
             } else {
                 return Vector3.zero;
             }
+            */
 
-            /*
             var plane = new Plane(Vector3.up, Vector3.zero);
 
             if (plane.Raycast(mouseCameraRay, out float distance)) {
@@ -39,7 +40,6 @@ namespace Arc.Core.Input {
             } else {
                 return Vector3.zero;
             }
-            */
         }
 
     }
