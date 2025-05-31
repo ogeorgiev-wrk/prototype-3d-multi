@@ -2,7 +2,7 @@ using Arc.Core.Player;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Arc.Core.Camera {
+namespace Arc.Core.PlayerCamera {
     public class CameraFollowAuhtoring : MonoBehaviour {
 
     }

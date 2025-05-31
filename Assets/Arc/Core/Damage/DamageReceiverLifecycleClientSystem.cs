@@ -5,7 +5,6 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 using Unity.Collections;
-using Arc.Core.Player;
 
 namespace Arc.Core.Damage {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
@@ -21,9 +20,9 @@ namespace Arc.Core.Damage {
             var ecbParallel = ecb.AsParallelWriter();
             var cameraForward = Vector3.zero;
             var cameraUp = Vector3.zero;
-            if (UnityEngine.Camera.main != null) {
-                cameraForward = UnityEngine.Camera.main.transform.forward;
-                cameraUp = UnityEngine.Camera.main.transform.up;
+            if (Camera.main != null) {
+                cameraForward = Camera.main.transform.forward;
+                cameraUp = Camera.main.transform.up;
             }
 
             var healthBarJob = new DamageReceiverHealthBarJob() {

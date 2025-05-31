@@ -4,7 +4,7 @@ using Unity.NetCode;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Arc.Core.Camera {
+namespace Arc.Core.PlayerCamera {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
     [UpdateInGroup(typeof(InitializationSystemGroup))]
     public partial struct CameraInitializationSystem : ISystem {

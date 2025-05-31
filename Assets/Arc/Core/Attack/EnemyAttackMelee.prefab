@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6277548683908581010}
   - component: {fileID: 1863247456411646213}
   - component: {fileID: 3855409170328750338}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7700778429691446254}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 1361312537251497959}
   - component: {fileID: 4265966477468529819}
   - component: {fileID: 8595747177306211496}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: SlashVFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,6 +152,9 @@ VisualEffect:
       - m_Value: 0.3
         m_Name: Duration
         m_Overridden: 0
+      - m_Value: 1
+        m_Name: Radius
+        m_Overridden: 1
     m_Vector2f:
       m_Array: []
     m_Vector3f:
@@ -341,8 +344,8 @@ GameObject:
   - component: {fileID: 9181430445076890799}
   - component: {fileID: 2018307662776805787}
   - component: {fileID: -30091238917536357}
-  m_Layer: 8
-  m_Name: PlayerAttackMelee
+  m_Layer: 9
+  m_Name: EnemyAttackMelee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -393,7 +396,7 @@ MonoBehaviour:
   SupportedGhostModes: 1
   OptimizationMode: 0
   Importance: 1
-  prefabId: cc3bcec853e91ea49b9e3dbc809ddf9a
+  prefabId: 04171ff35d459bf4988ab6f29cc9b89a
   HasOwner: 0
   SupportAutoCommandTarget: 1
   TrackInterpolationDelay: 0
@@ -447,7 +450,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 4
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-30091238917536357
 MonoBehaviour:
@@ -463,7 +466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Source: 1
   Params:
-    Damage: 50
+    Damage: 10
     MoveSpeed: 0
     MaxTargets: 10
     MaxDistance: 100

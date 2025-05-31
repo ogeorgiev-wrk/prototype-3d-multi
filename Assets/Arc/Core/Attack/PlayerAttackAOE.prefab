@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6277548683908581010}
   - component: {fileID: 1863247456411646213}
   - component: {fileID: 3855409170328750338}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 1361312537251497959}
   - component: {fileID: 4265966477468529819}
   - component: {fileID: 8595747177306211496}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VisualEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +341,7 @@ GameObject:
   - component: {fileID: 9181430445076890799}
   - component: {fileID: 2018307662776805787}
   - component: {fileID: -30091238917536357}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: PlayerAttackAOE
   m_TagString: Untagged
   m_Icon: {fileID: 0}

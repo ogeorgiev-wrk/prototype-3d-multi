@@ -35,7 +35,7 @@ namespace Arc.Core.Enemy {
     [WithAll(typeof(EnemyTag))]
     public partial struct EnemyTargetJob : IJobEntity {
         [ReadOnly] public NativeArray<LocalTransform> TargetArray;
-        public void Execute(ref EnemyTargetPosition targetPosition, in LocalTransform transform) {
+        public void Execute(ref EnemyState enemyState, in LocalTransform transform) {
             var closestPosition = TargetArray[0].Position;
 
             var minDistanceSq = math.distancesq(closestPosition, transform.Position);
@@ -47,7 +47,8 @@ namespace Arc.Core.Enemy {
                 closestPosition = target.Position;
             }
 
-            targetPosition.Value = closestPosition;
+            enemyState.TargetPosition = closestPosition;
+            enemyState.DistanceFromTargetSq = minDistanceSq;
         }
 
     }

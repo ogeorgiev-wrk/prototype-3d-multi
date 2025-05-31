@@ -49,7 +49,6 @@ namespace Arc.Core.Player {
 
                 var attackEntity = state.EntityManager.Instantiate(attackPrefabBuffer[swapInput.ValueRO.Value].Value);
                 var attackSetup = state.EntityManager.GetComponentData<DamageDealerSetup>(attackEntity);
-                var attackSource = attackSetup.Source;
                 var attackBaseParams = attackSetup.BaseParams;
 
                 var attackModifiers = attackState.ValueRO.Modifiers;

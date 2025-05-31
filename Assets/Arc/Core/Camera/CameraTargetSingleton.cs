@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Arc.Core.Camera {
+namespace Arc.Core.PlayerCamera {
 
     public class CameraTargetSingleton : MonoBehaviour {
         public static CameraTargetSingleton Instance;
