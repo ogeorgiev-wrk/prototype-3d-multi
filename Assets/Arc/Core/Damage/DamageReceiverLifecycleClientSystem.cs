@@ -14,7 +14,7 @@ namespace Arc.Core.Damage {
 
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state) {
             var ecb = new EntityCommandBuffer(Allocator.TempJob);
             var ecbParallel = ecb.AsParallelWriter();

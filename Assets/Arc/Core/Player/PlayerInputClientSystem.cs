@@ -5,7 +5,7 @@ using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 using Arc.Core.Input;
-using Unity.VisualScripting;
+using Arc.Core.UI;
 
 namespace Arc.Core.Player {
     [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation | WorldSystemFilterFlags.ThinClientSimulation)]
@@ -61,6 +61,7 @@ namespace Arc.Core.Player {
                 _weaponIndex += increment;
                 if (_weaponIndex < 0) _weaponIndex = _weaponCount - 1;
                 if (_weaponIndex == _weaponCount) _weaponIndex = 0;
+                GameUISingleton.Instance.SelectWeapon(_weaponIndex);
                 input.ValueRW.Value = _weaponIndex;
             }
         }
