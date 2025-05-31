@@ -450,7 +450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Source: 1
   Params:
-    Damage: 40
+    Damage: 10
     MoveSpeed: 15
     MaxTargets: 1
     MaxDistance: 2

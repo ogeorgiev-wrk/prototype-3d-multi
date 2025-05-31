@@ -49,6 +49,7 @@ namespace Arc.Core.Enemy {
 
             enemyState.TargetPosition = closestPosition;
             enemyState.DistanceFromTargetSq = minDistanceSq;
+
         }
 
     }
