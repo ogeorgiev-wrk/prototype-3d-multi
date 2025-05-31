@@ -6,56 +6,50 @@ using Unity.Transforms;
 using Unity.Collections;
 using UnityEngine;
 using Arc.Core.Damage;
+using Arc.Core.Player;
 
 namespace Arc.Core.Enemy {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
-    [UpdateInGroup(typeof(PredictedSimulationSystemGroup))]
     public partial struct EnemyAttackServerSystem : ISystem {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-            state.RequireForUpdate<NetworkTime>();
+            state.RequireForUpdate<PlayerTag>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            var networkTime = SystemAPI.GetSingleton<NetworkTime>();
             var ecb = new EntityCommandBuffer(Allocator.Temp);
             var deltaTime = SystemAPI.Time.DeltaTime;
 
             foreach (var (
                 enemyTransform, 
-                enemyState, 
-                enemyData
+                attackState, 
+                attackData
                 ) in SystemAPI.Query<RefRW<LocalTransform>, 
-                RefRW<EnemyState>, 
-                RefRO<EnemyData>
+                RefRW<EnemyAttackState>, 
+                RefRO<EnemyAttackData>
                 >().WithAll<EnemyTag, Simulate>()) {
-                if (!networkTime.IsFinalFullPredictionTick) continue;
 
-                enemyState.ValueRW.AttackCooldownCurrent -= deltaTime;
+                attackState.ValueRW.CooldownCurrent -= deltaTime;
 
-                bool isInCooldown = enemyState.ValueRO.AttackCooldownCurrent > 0;
-                if (isInCooldown) continue;
+                bool isOnCooldown = attackState.ValueRO.CooldownCurrent > 0;
+                if (isOnCooldown) continue;
 
-                bool isOutOfRange = enemyState.ValueRO.DistanceFromTargetSq > enemyData.ValueRO.AttackRangeSq;
+                bool isOutOfRange = attackState.ValueRO.DistanceFromTargetSq == 0 || attackState.ValueRO.DistanceFromTargetSq > attackData.ValueRO.DistanceFromTargetMax;
                 if (isOutOfRange) continue;
 
-                bool isAttackReady = enemyState.ValueRO.AttackCooldownCurrent <= 0;
+                bool isAttackReady = attackState.ValueRO.CooldownCurrent < 0;
                 if (!isAttackReady) continue;
 
-                enemyState.ValueRW.AttackCooldownCurrent = enemyData.ValueRO.AttackCooldownMax;
-                Debug.Log("ATTACK!");
+                attackState.ValueRW.CooldownCurrent = attackData.ValueRO.CooldownMax;
 
-
-
-
-                var attackEntity = state.EntityManager.Instantiate(enemyData.ValueRO.AttackEntity);
+                var attackEntity = state.EntityManager.Instantiate(attackData.ValueRO.EntityPrefab);
                 var attackSetup = state.EntityManager.GetComponentData<DamageDealerSetup>(attackEntity);
                 var attackBaseParams = attackSetup.BaseParams;
 
-                var attackOriginPosition = attackSetup.Source == DamageDealerSource.TARGET ? enemyState.ValueRO.TargetPosition : enemyTransform.ValueRO.Position;
+                var attackOriginPosition = attackSetup.Source == DamageDealerSource.TARGET ? attackState.ValueRO.TargetPosition : enemyTransform.ValueRO.TransformPoint(attackData.ValueRO.Origin);
 
-                var attackDirection = enemyTransform.ValueRO.Position - enemyState.ValueRO.TargetPosition;
+                var attackDirection = attackState.ValueRO.TargetPosition - enemyTransform.ValueRO.Position;
                 var attackTransform = LocalTransform.FromPositionRotation(attackOriginPosition, quaternion.LookRotation(attackDirection, math.up()));
 
 

@@ -41,11 +41,7 @@ namespace Arc.Core.Player {
                 if (!networkTime.IsFinalFullPredictionTick) continue;
 
                 var isAttacking = attackInput.ValueRO.Value.IsSet;
-
-                if (!isAttacking) {
-                    playerTransform.ValueRW.Scale = 1f;
-                    continue;
-                }
+                if (!isAttacking) continue;
 
                 var attackEntity = state.EntityManager.Instantiate(attackPrefabBuffer[swapInput.ValueRO.Value].Value);
                 var attackSetup = state.EntityManager.GetComponentData<DamageDealerSetup>(attackEntity);
@@ -74,9 +70,6 @@ namespace Arc.Core.Player {
                     }
                 };
                 ecb.SetComponent(attackEntity, damageDealerData);
-
-
-                playerTransform.ValueRW.Scale = isAttacking ? 1.2f : 1f;
             }
 
             ecb.Playback(state.EntityManager);

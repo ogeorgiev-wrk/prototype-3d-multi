@@ -5,19 +5,22 @@ using UnityEngine;
 
 namespace Arc.Core.Enemy {
     public class EnemyAuthoring : MonoBehaviour {
-        public float AttackRange;
-        public float AttackCooldown;
-        public GameObject AttackPrefab;
+        public GameObject AttackGameObjectPrefab;
+        public Transform AttackOrigin;
+        public float AttackDistanceMax;
+        public float AttackCooldownMax;
 
         public class Baker : Baker<EnemyAuthoring> {
             public override void Bake(EnemyAuthoring authoring) {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new EnemyTag());
-                AddComponent(entity, new EnemyState());
-                AddComponent(entity, new EnemyData() {
-                    AttackRangeSq = math.square(authoring.AttackRange),
-                    AttackCooldownMax = authoring.AttackCooldown,
-                    AttackEntity = GetEntity(authoring.AttackPrefab, TransformUsageFlags.Dynamic),
+                AddComponent(entity, new EnemyAttackState());
+                AddComponent(entity, new EnemyAttackData() {
+                    EntityPrefab = GetEntity(authoring.AttackGameObjectPrefab, TransformUsageFlags.Dynamic),
+                    Origin = authoring.AttackOrigin.localPosition,
+                    DistanceFromTargetMax = math.square(authoring.AttackDistanceMax),
+                    CooldownMax = authoring.AttackCooldownMax,
+                    
                 });
             }
         }
@@ -27,15 +30,17 @@ namespace Arc.Core.Enemy {
 
     }
 
-    public struct EnemyData : IComponentData {
-        public float AttackRangeSq;
-        public float AttackCooldownMax;
-        public Entity AttackEntity;
+    public struct EnemyAttackData : IComponentData {
+        public Entity EntityPrefab;
+        public float3 Origin;
+        public float DistanceFromTargetMax;
+        public float CooldownMax;
+        
     }
 
-    public struct EnemyState : IComponentData {
+    public struct EnemyAttackState : IComponentData {
         public float3 TargetPosition;
         public float DistanceFromTargetSq;
-        public float AttackCooldownCurrent;
+        public float CooldownCurrent;
     }
 }

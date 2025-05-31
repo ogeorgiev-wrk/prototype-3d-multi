@@ -5,13 +5,14 @@ using Unity.Collections;
 using Unity.Mathematics;
 using Unity.NetCode;
 using Unity.Transforms;
+using Arc.Core.Player;
 
 namespace Arc.Core.Enemy {
     [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
     partial struct EnemySpawnServerSystem : ISystem {
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
-
+            
         }
 
         [BurstCompile]

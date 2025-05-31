@@ -29,9 +29,9 @@ namespace Arc.Core.Enemy {
     [BurstCompile]
     [WithAll(typeof(EnemyTag))]
     public partial struct EnemyMovementJob : IJobEntity {
-        public void Execute(ref UnitMovementDirection movementDirection, ref UnitLookDirection lookDirection, in EnemyState enemyState, in EnemyData enemyData, in LocalTransform transform) {
+        public void Execute(ref UnitMovementDirection movementDirection, ref UnitLookDirection lookDirection, in EnemyAttackState enemyState, in EnemyAttackData enemyData, in LocalTransform transform) {
             var distanceSq = math.distancesq(enemyState.TargetPosition, transform.Position);
-            bool isWithinRange = distanceSq <= enemyData.AttackRangeSq;
+            bool isWithinRange = distanceSq <= enemyData.DistanceFromTargetMax;
 
             var targetDirectionBase = enemyState.TargetPosition - transform.Position;
             var targetDirectionNormalized = math.normalize(targetDirectionBase);
