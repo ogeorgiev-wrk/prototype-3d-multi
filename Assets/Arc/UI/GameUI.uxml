@@ -1,6 +1,0 @@
-<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Arc/UI/GameUIStyle.uss?fileID=7433441132597879392&amp;guid=e1685973f8429a24c9f94ae7d13fd381&amp;type=3#GameUIStyle" />
-    <engine:VisualElement style="flex-grow: 1; flex-direction: column; transition-property: opacity; transition-duration: 1s; transition-delay: 0s; opacity: 1;">
-        <engine:Button text="Button" class="myButton" style="position: absolute; top: 0; left: 0; width: 200px; height: 200px;" />
-    </engine:VisualElement>
-</engine:UXML>
