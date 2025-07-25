@@ -1,0 +1,23 @@
+.myButton {
+    background-color: rgb(255, 0, 0);
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.myButton:hover {
+    scale: 1.02 1.02;
+}
+
+.myButton:active {
+    scale: 0.98 0.98;
+}
